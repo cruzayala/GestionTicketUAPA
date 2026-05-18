@@ -1,32 +1,111 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Tickets</title>
+    <title>GestionTicket UAPA</title>
+    <link rel="icon" href="data:,">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
     <link rel="stylesheet" href="css/styles.css">
 </head>
-
 <body>
-    <header class="barra-superior">
-        <div class="contenedor-navegacion">
-            
-            <!-- Logo del Sistema -->
-            <div class="logo">
-                <span class="emoji-logo">🎫</span>
-                <span class="texto-logo-resaltado">Soporte</span>
-                <span class="texto-logo-separador">|</span>
-                <span class="texto-logo-normal">Tickets</span>
+    <header class="landing-header">
+        <a class="logo-principal" href="index.html">
+            <span class="logo-icono">&#127915;</span>
+            <span class="logo-resaltado">Soporte</span>
+            <span class="logo-separador">|</span>
+            <span class="logo-normal">Tickets</span>
+        </a>
+
+        <nav class="landing-nav">
+            <a href="index.html">Inicio</a>
+            <a href="crear-ticket.html">Crear ticket</a>
+            <a href="#buscar-ticket-modal">Buscar ticket</a>
+            <a href="login.html">Iniciar sesion</a>
+        </nav>
+    </header>
+
+    <main class="landing">
+        <section class="hero">
+            <div class="hero-texto">
+                <p class="etiqueta">Portal de ayuda</p>
+                <h1>Sistema de tickets para soporte y seguimiento</h1>
+                <p>GestionTicket UAPA permite registrar solicitudes de ayuda y revisar tickets desde un panel de soporte.</p>
+                <div class="acciones">
+                    <a class="boton-principal" href="crear-ticket.html">
+                        Crear ticket
+                        <span class="boton-flecha">&rarr;</span>
+                    </a>
+                    <a class="boton-secundario" href="#buscar-ticket-modal">Buscar ticket</a>
+                </div>
             </div>
 
-            <!-- Menú de Navegación-->
-            <nav class="menu-navegacion">
-                <a href="#" class="enlace-menu activo">Inicio</a>
-                <a href="#" class="enlace-menu">Crear Ticket</a>
-                <a href="#" class="enlace-menu">Historial</a>
-            </nav>
+            <aside class="hero-panel">
+                <img src="img/soporte-helpdesk.png" alt="Agente de soporte atendiendo tickets por telefono">
+                <div class="hero-panel-info">
+                    <strong>Mesa de ayuda</strong>
+                    <span>Solicitudes, seguimiento y soporte</span>
+                </div>
+            </aside>
+        </section>
 
+        <section class="hero-features">
+            <article class="feature-card">
+                <span class="feature-icono">&#9889;</span>
+                <div>
+                    <strong>Tickets en minutos</strong>
+                    <p>Cree solicitudes en 3 pasos sencillos sin necesidad de registrarse.</p>
+                </div>
+            </article>
+            <article class="feature-card">
+                <span class="feature-icono">&#128270;</span>
+                <div>
+                    <strong>Seguimiento en vivo</strong>
+                    <p>Consulte el estado de su ticket con su numero de seguimiento.</p>
+                </div>
+            </article>
+            <article class="feature-card">
+                <span class="feature-icono">&#128172;</span>
+                <div>
+                    <strong>Soporte cercano</strong>
+                    <p>Equipo de soporte UAPA disponible para responder cada solicitud.</p>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <section class="modal" id="buscar-ticket-modal">
+        <div class="modal-card">
+            <header class="modal-header">
+                <div>
+                    <p class="etiqueta">Seguimiento</p>
+                    <h2>Buscar estado de ticket</h2>
+                </div>
+                <a href="index.html" class="modal-cerrar">Cerrar</a>
+            </header>
+
+            <p class="modal-texto">Ingrese el numero de ticket para consultar el estado de la solicitud.</p>
+
+            <form class="busqueda-form" action="estado-ticket.html">
+                <label for="numero-ticket">Numero de ticket</label>
+                <div class="input-icon">
+                    <span class="input-emoji">&#128269;</span>
+                    <input type="text" id="numero-ticket" placeholder="GT-2026-001">
+                </div>
+                <button type="submit">
+                    Buscar ticket
+                    <span class="boton-flecha">&rarr;</span>
+                </button>
+            </form>
+
+            <div class="estado-mini">
+                <span>Ejemplo</span>
+                <strong>GT-2026-001</strong>
+                <small>Estado: En proceso</small>
+            </div>
         </div>
-    </header>
+    </section>
 </body>
 </html>

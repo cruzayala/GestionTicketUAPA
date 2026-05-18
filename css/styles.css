@@ -1,0 +1,96 @@
+:root {
+    --color-Principal: #0b1838;
+    --color-Secundario: #F68121;
+    --color-blanco: #ffffff;
+    --color-negro: #000000;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--color-blanco);
+    color: var(--color-Principal);
+    padding: 20px;
+}
+
+h1 {
+    color: var(--color-Secundario);
+}
+
+/* Fondo azul oscuro institucional para toda la barra */
+.barra-superior {
+    background-color: var(--color-Principal);
+    width: 100%;
+    position: fixed; 
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Contenedor que alinea el logo a la izquierda y el menú a la derecha */
+.contenedor-navegacion {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;            
+}
+
+/* Estilos del Logo */
+.logo {
+    display: flex;
+    align-items: center;
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.emoji-logo {
+    margin-right: 8px;
+    font-size: 1.5rem;
+}
+
+.texto-logo-resaltado {
+    color: var(--color-Secundario); 
+}
+
+.texto-logo-separador {
+    color: #4a5568; 
+    margin: 0 6px;
+}
+
+.texto-logo-normal {
+    color: var(--color-blanco);
+    font-weight: 400; 
+}
+
+/* Estilos del menu de navegacion */
+.menu-navegacion {
+    display: flex;
+    gap: 20px; 
+}
+
+.enlace-menu {
+    color: #a0aec0; 
+    text-decoration: none; 
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+/* Cambia a blanco cuando pasas el puntero del mouse por encima */
+.enlace-menu:hover {
+    color: var(--color-blanco);
+}
+
+/* Resalta en naranja la pestaña donde estás actualmente */
+.enlace-menu.activo {
+    color: var(--color-Secundario);
+    border-bottom: 2px solid var(--color-Secundario);
+    padding-bottom: 4px;
+}
+
+/* Empuja el fondo de la página para que la barra fija no tape nada */
+body {
+    padding-top: 80px; 
+}

@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
     <link rel="stylesheet" href="css/styles.css">
 </head>
-<body>
+<body data-page="ticket-detalle">
     <main class="pagina-ticket">
         <section class="ticket-shell">
             <aside class="ticket-aside">
@@ -75,25 +75,25 @@
                     <label>Tipo de solicitud</label>
                     <div class="opciones-radio">
                         <label class="opcion-radio">
-                            <input type="radio" name="tipo" checked>
+                            <input type="radio" name="tipo" value="Soporte tecnico" checked>
                             <span class="opcion-icono">&#128187;</span>
                             <span class="opcion-titulo">Soporte tecnico</span>
                             <small>Problemas con equipos o cuentas</small>
                         </label>
                         <label class="opcion-radio">
-                            <input type="radio" name="tipo">
+                            <input type="radio" name="tipo" value="Plataforma virtual">
                             <span class="opcion-icono">&#127760;</span>
                             <span class="opcion-titulo">Plataforma virtual</span>
                             <small>Aulas, materiales y accesos</small>
                         </label>
                         <label class="opcion-radio">
-                            <input type="radio" name="tipo">
+                            <input type="radio" name="tipo" value="Administrativa">
                             <span class="opcion-icono">&#128209;</span>
                             <span class="opcion-titulo">Administrativa</span>
                             <small>Tramites academicos</small>
                         </label>
                         <label class="opcion-radio">
-                            <input type="radio" name="tipo">
+                            <input type="radio" name="tipo" value="Otro">
                             <span class="opcion-icono">&#10067;</span>
                             <span class="opcion-titulo">Otro</span>
                             <small>Caso fuera de las categorias</small>
@@ -150,5 +150,6 @@
             </form>
         </section>
     </main>
+    <script src="js/app.js"></script>
 </body>
 </html>

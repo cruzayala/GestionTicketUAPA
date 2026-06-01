@@ -1071,6 +1071,16 @@ footer p {
     border-color: #22c55e;
 }
 
+.copiar-boton,
+.chip {
+    cursor: pointer;
+}
+
+.copiar-boton.copiado {
+    background: #dcfce7;
+    color: #166534;
+}
+
 .confirmacion-card {
     align-content: start;
     text-align: center;

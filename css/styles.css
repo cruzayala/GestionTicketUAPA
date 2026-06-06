@@ -819,9 +819,8 @@ footer p {
     pointer-events: none;
 }
 
-.input-icon input,
-.input-icon select {
-    padding-left: 42px;
+.input-icon input, select {
+    padding-left: 46px !important;
 }
 
 .ticket-form input,
@@ -2215,4 +2214,7 @@ footer p {
         width: 100%;
         text-align: center;
     }
+
+
 }
+

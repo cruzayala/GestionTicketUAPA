@@ -821,7 +821,7 @@ footer p {
 
 .input-icon input,
 .input-icon select {
-    padding-left: 42px;
+    padding-left: 46px;
 }
 
 .ticket-form input,
@@ -1024,6 +1024,61 @@ footer p {
     background: #f1f5fb;
     color: var(--gris);
     font-size: 0.88rem;
+}
+
+.mensaje-form {
+    border-radius: 12px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    line-height: 1.4;
+    padding: 0.9rem 1rem;
+}
+
+.mensaje-error {
+    background: #fff1f1;
+    border: 1px solid #ffc9c9;
+    color: #a51616;
+}
+
+.mensaje-exito {
+    background: #ecfff5;
+    border: 1px solid #a7f3c7;
+    color: #166534;
+}
+
+.error-campo {
+    color: #b42318;
+    display: none;
+    font-size: 0.78rem;
+    font-weight: 700;
+    margin-top: 0.35rem;
+}
+
+.campo-error .error-campo {
+    display: block;
+}
+
+.campo-error input,
+.campo-error textarea,
+.campo-error select {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.12);
+}
+
+.campo-ok input,
+.campo-ok textarea,
+.campo-ok select {
+    border-color: #22c55e;
+}
+
+.copiar-boton,
+.chip {
+    cursor: pointer;
+}
+
+.copiar-boton.copiado {
+    background: #dcfce7;
+    color: #166534;
 }
 
 .confirmacion-card {

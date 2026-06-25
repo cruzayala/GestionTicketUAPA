@@ -130,6 +130,16 @@ def ticket_manage(request, number):
     return render(request, "tickets/ticket_manage.html", {"ticket": ticket, "form": form})
 
 
+def ticket_delete(request, number):
+    if not support_required(request):
+        return redirect("login")
+    ticket = get_object_or_404(Ticket, number=number.upper())
+    if request.method == "POST":
+        ticket.delete()
+        return redirect("ticket_list")
+    return redirect("ticket_manage", number=ticket.number)
+
+
 def settings_view(request):
     if not support_required(request):
         return redirect("login")

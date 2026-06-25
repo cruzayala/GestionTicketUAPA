@@ -839,6 +839,30 @@ footer p {
     padding-left: 52px;
 }
 
+.form-eliminar-ticket {
+    margin: 14px 0 22px;
+    padding-top: 14px;
+    border-top: 1px solid #e3e9f3;
+}
+
+.boton-peligro {
+    width: 100%;
+    border: 1px solid #fecaca;
+    border-radius: 12px;
+    padding: 12px 18px;
+    background: #fff1f2;
+    color: #b91c1c;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.boton-peligro:hover {
+    border-color: #fca5a5;
+    background: #fee2e2;
+    transform: translateY(-1px);
+}
+
 .ticket-form input:focus,
 .ticket-form select:focus,
 .ticket-form textarea:focus {

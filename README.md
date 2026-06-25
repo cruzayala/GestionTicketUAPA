@@ -2,6 +2,14 @@
 
 Sistema web para gestion de tickets de soporte.
 
+## Funcionalidades
+
+- Crear tickets de soporte.
+- Consultar estado por numero de ticket.
+- Listar y filtrar tickets desde el panel administrativo.
+- Actualizar estado e historial del ticket.
+- Eliminar tickets desde el detalle administrativo.
+
 ## Instalacion
 
 ```bash

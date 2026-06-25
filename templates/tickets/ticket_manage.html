@@ -84,6 +84,10 @@
                     </div>
                     <button type="submit" class="boton-principal">Guardar cambio <span class="boton-flecha">&rarr;</span></button>
                 </form>
+                <form method="post" action="{% url 'ticket_delete' ticket.number %}" class="form-eliminar-ticket" onsubmit="return confirm('Esta seguro de eliminar este ticket? Esta accion no se puede deshacer.');">
+                    {% csrf_token %}
+                    <button type="submit" class="boton-peligro">Eliminar ticket</button>
+                </form>
                 <div>
                     <label class="label-seccion">Historial</label>
                     <ul class="timeline">

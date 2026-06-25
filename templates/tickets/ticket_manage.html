@@ -15,10 +15,20 @@
         </header>
 
         <main class="panel-doble">
-            <section class="panel">
+            <section class="panel detalle-ticket-panel">
                 <div class="panel-titulo">
-                    <h2>Informacion</h2>
+                    <div>
+                        <h2>Informacion general</h2>
+                        <p class="sub-titulo">Datos principales de la solicitud recibida.</p>
+                    </div>
                     <span class="estado-badge {{ ticket.status_class }}">{{ ticket.status }}</span>
+                </div>
+                <div class="detalle-destacado">
+                    <div>
+                        <span>Asunto</span>
+                        <strong>{{ ticket.subject }}</strong>
+                    </div>
+                    <span class="prioridad-badge {{ ticket.priority_class }}">{{ ticket.priority }}</span>
                 </div>
                 <div class="resumen-confirmacion">
                     <article>
@@ -38,24 +48,26 @@
                         <strong>{{ ticket.category }}</strong>
                     </article>
                     <article>
-                        <span>Prioridad</span>
-                        <strong class="prioridad-badge {{ ticket.priority_class }}">{{ ticket.priority }}</strong>
-                    </article>
-                    <article>
                         <span>Fecha</span>
                         <strong>{{ ticket.created_at|date:"d/m/Y H:i" }}</strong>
                     </article>
+                    <article>
+                        <span>Ultima actualizacion</span>
+                        <strong>{{ ticket.updated_at|date:"d/m/Y H:i" }}</strong>
+                    </article>
                 </div>
-                <div class="campo">
+                <div class="descripcion-ticket">
                     <label>Descripcion</label>
-                    <p class="sub-texto">{{ ticket.description }}</p>
+                    <p>{{ ticket.description }}</p>
                 </div>
             </section>
 
             <section class="panel">
                 <div class="panel-titulo">
-                    <h2>Actualizar estado</h2>
-                    <span>{{ ticket.updated_at|date:"d/m/Y H:i" }}</span>
+                    <div>
+                        <h2>Seguimiento</h2>
+                        <p class="sub-titulo">Cambie el estado y registre una nota breve.</p>
+                    </div>
                 </div>
                 <form method="post" class="ticket-form">
                     {% csrf_token %}

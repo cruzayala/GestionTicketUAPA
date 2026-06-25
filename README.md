@@ -28,6 +28,8 @@ usuario: admin
 clave: 1234
 ```
 
+El acceso administrativo se valida contra la tabla de usuarios de Django en la base de datos. La migracion inicial crea el usuario de soporte `admin` con permisos de staff.
+
 ## Base de datos
 
 ```text

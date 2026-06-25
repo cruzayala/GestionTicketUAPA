@@ -839,6 +839,11 @@ footer p {
     padding-left: 52px;
 }
 
+.config-grupo .input-icon input,
+.config-grupo .input-icon select {
+    padding-left: 52px;
+}
+
 .form-eliminar-ticket {
     margin: 14px 0 22px;
     padding-top: 14px;

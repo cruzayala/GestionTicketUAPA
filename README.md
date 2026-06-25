@@ -1,15 +1,27 @@
 # GestionTicket UAPA
 
-Proyecto web para la gestion de tickets de soporte, desarrollado como parte de la asignatura ISW-306.
+Sistema web para gestion de tickets de soporte.
 
-## Etapa 1
+## Instalacion
 
-La primera etapa contiene la maquetacion inicial del sistema usando HTML5 y CSS externo. Incluye una pagina de inicio, acceso al panel, creacion de tickets, consulta de estado, listado de tickets y una seccion de configuracion preparada para futuras etapas.
+```bash
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver
+```
 
-## Tecnologias utilizadas
+## Acceso
 
-- HTML5
-- CSS3
-- Flexbox
-- CSS Grid
-- Media Queries
+```text
+http://127.0.0.1:8000/
+usuario: admin
+clave: 1234
+```
+
+## Base de datos
+
+```text
+database/schema.sql
+```

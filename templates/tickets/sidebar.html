@@ -1,0 +1,41 @@
+<aside class="sidebar">
+    <header class="marca">
+        <a class="logo-principal logo-sidebar logo-claro" href="{% url 'panel' %}">
+            <span class="logo-icono">&#127915;</span>
+            <span class="logo-resaltado">Soporte</span>
+            <span class="logo-separador">|</span>
+            <span class="logo-normal">Tickets</span>
+        </a>
+    </header>
+
+    <nav class="menu-lateral">
+        <a href="{% url 'panel' %}" class="{% if active == 'panel' %}activo{% endif %}">
+            <span class="menu-icono">&#127968;</span>
+            Dashboard
+        </a>
+        <a href="{% url 'ticket_list' %}" class="{% if active == 'tickets' %}activo{% endif %}">
+            <span class="menu-icono">&#128221;</span>
+            Tickets
+        </a>
+        <a href="{% url 'ticket_contact' %}">
+            <span class="menu-icono">&#10133;</span>
+            Crear ticket
+        </a>
+        <a href="{% url 'settings' %}" class="{% if active == 'settings' %}activo{% endif %}">
+            <span class="menu-icono">&#9881;</span>
+            Configuracion
+        </a>
+        <a href="{% url 'logout' %}">
+            <span class="menu-icono">&#128682;</span>
+            Cerrar sesion
+        </a>
+    </nav>
+
+    <div class="sidebar-usuario">
+        <span class="sidebar-avatar">AS</span>
+        <div>
+            <strong>Equipo soporte</strong>
+            <small>soporte@uapa.edu</small>
+        </div>
+    </div>
+</aside>

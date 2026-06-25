@@ -1,0 +1,101 @@
+{% extends "tickets/base.html" %}
+{% block title %}Estado del ticket - GestionTicket UAPA{% endblock %}
+{% block page %}estado-ticket{% endblock %}
+{% block content %}
+<main class="pagina-ticket">
+    <section class="ticket-shell">
+        <aside class="ticket-aside">
+            <a class="logo-principal logo-claro" href="{% url 'home' %}">
+                <span class="logo-icono">&#127915;</span>
+                <span class="logo-resaltado">Soporte</span>
+                <span class="logo-separador">|</span>
+                <span class="logo-normal">Tickets</span>
+            </a>
+            <div class="aside-titulo">
+                <p class="etiqueta etiqueta-clara">Consulta de estado</p>
+                <h2>Asi va su solicitud</h2>
+                <p class="aside-texto">Revise el avance de su ticket y los eventos registrados por el equipo de soporte.</p>
+            </div>
+            <ol class="pasos-lista">
+                <li class="paso-item completado">
+                    <span class="paso-numero">&#10003;</span>
+                    <div>
+                        <strong>Recibido</strong>
+                        <small>Solicitud registrada</small>
+                    </div>
+                </li>
+                <li class="paso-item activo">
+                    <span class="paso-numero">&#9881;</span>
+                    <div>
+                        <strong>{{ ticket.status }}</strong>
+                        <small>Estado actual</small>
+                    </div>
+                </li>
+            </ol>
+            <div class="aside-pie">
+                <span class="punto-vivo"></span>
+                <p>En atencion ahora</p>
+            </div>
+        </aside>
+
+        <section class="ticket-form">
+            <div class="ticket-form-cabecera">
+                <div>
+                    <p class="etiqueta">Resultado de la consulta</p>
+                    <h1>Estado de su ticket</h1>
+                    <p class="sub-texto">Guarde el numero para futuras consultas.</p>
+                </div>
+                <div class="badge-paso">&#128270;</div>
+            </div>
+            <div class="ticket-numero-card">
+                <div>
+                    <span>Numero de ticket</span>
+                    <strong>{{ ticket.number }}</strong>
+                </div>
+                <span class="copiar-boton">{{ ticket.status }}</span>
+            </div>
+            <div class="resumen-confirmacion">
+                <article>
+                    <span>Categoria</span>
+                    <strong>{{ ticket.category }}</strong>
+                </article>
+                <article>
+                    <span>Prioridad</span>
+                    <strong class="prioridad-badge {{ ticket.priority_class }}">{{ ticket.priority }}</strong>
+                </article>
+                <article>
+                    <span>Estado</span>
+                    <strong class="{{ ticket.status_class }}">{{ ticket.status }}</strong>
+                </article>
+            </div>
+            <div>
+                <label class="label-seccion">Historial</label>
+                <ul class="timeline">
+                    {% for event in ticket.events.all %}
+                        <li class="completado">
+                            <span class="timeline-punto">&#10003;</span>
+                            <div class="timeline-cuerpo">
+                                <strong>{{ event.title }}</strong>
+                                <small>{{ event.created_at|date:"d/m/Y H:i" }}</small>
+                                {% if event.note %}<p>{{ event.note }}</p>{% endif %}
+                            </div>
+                        </li>
+                    {% empty %}
+                        <li>
+                            <span class="timeline-punto">&#128229;</span>
+                            <div class="timeline-cuerpo">
+                                <strong>Ticket recibido</strong>
+                                <small>{{ ticket.created_at|date:"d/m/Y H:i" }}</small>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="ticket-form-acciones">
+                <a class="boton-secundario" href="{% url 'home' %}"><span class="boton-flecha invertida">&larr;</span> Volver al inicio</a>
+                <a class="boton-principal" href="{% url 'ticket_contact' %}">Crear otro ticket <span class="boton-flecha">&rarr;</span></a>
+            </div>
+        </section>
+    </section>
+</main>
+{% endblock %}

@@ -1,0 +1,102 @@
+{% extends "tickets/base.html" %}
+{% block title %}Detalle administrativo - GestionTicket UAPA{% endblock %}
+{% block page %}ticket-detalle{% endblock %}
+{% block content %}
+<div class="layout">
+    {% include "tickets/sidebar.html" with active="tickets" %}
+    <div class="contenido">
+        <header class="encabezado">
+            <div>
+                <p class="etiqueta">Detalle del ticket</p>
+                <h1>{{ ticket.number }}</h1>
+                <p class="sub-titulo">{{ ticket.subject }}</p>
+            </div>
+            <a class="boton-secundario" href="{% url 'ticket_list' %}">Volver</a>
+        </header>
+
+        <main class="panel-doble">
+            <section class="panel">
+                <div class="panel-titulo">
+                    <h2>Informacion</h2>
+                    <span class="estado-badge {{ ticket.status_class }}">{{ ticket.status }}</span>
+                </div>
+                <div class="resumen-confirmacion">
+                    <article>
+                        <span>Solicitante</span>
+                        <strong>{{ ticket.full_name }}</strong>
+                    </article>
+                    <article>
+                        <span>Correo</span>
+                        <strong>{{ ticket.email }}</strong>
+                    </article>
+                    <article>
+                        <span>Matricula</span>
+                        <strong>{{ ticket.enrollment|default:"No aplica" }}</strong>
+                    </article>
+                    <article>
+                        <span>Categoria</span>
+                        <strong>{{ ticket.category }}</strong>
+                    </article>
+                    <article>
+                        <span>Prioridad</span>
+                        <strong class="prioridad-badge {{ ticket.priority_class }}">{{ ticket.priority }}</strong>
+                    </article>
+                    <article>
+                        <span>Fecha</span>
+                        <strong>{{ ticket.created_at|date:"d/m/Y H:i" }}</strong>
+                    </article>
+                </div>
+                <div class="campo">
+                    <label>Descripcion</label>
+                    <p class="sub-texto">{{ ticket.description }}</p>
+                </div>
+            </section>
+
+            <section class="panel">
+                <div class="panel-titulo">
+                    <h2>Actualizar estado</h2>
+                    <span>{{ ticket.updated_at|date:"d/m/Y H:i" }}</span>
+                </div>
+                <form method="post" class="ticket-form">
+                    {% csrf_token %}
+                    <div class="campo">
+                        <label for="id_status">Estado</label>
+                        <div class="input-icon">
+                            <span class="input-emoji">&#9881;</span>
+                            {{ form.status }}
+                        </div>
+                    </div>
+                    <div class="campo">
+                        <label for="id_note">Nota</label>
+                        {{ form.note }}
+                    </div>
+                    <button type="submit" class="boton-principal">Guardar cambio <span class="boton-flecha">&rarr;</span></button>
+                </form>
+                <div>
+                    <label class="label-seccion">Historial</label>
+                    <ul class="timeline">
+                        {% for event in ticket.events.all %}
+                            <li>
+                                <span class="timeline-punto">&#9998;</span>
+                                <div class="timeline-cuerpo">
+                                    <strong>{{ event.title }}</strong>
+                                    <small>{{ event.created_at|date:"d/m/Y H:i" }}</small>
+                                    {% if event.note %}<p>{{ event.note }}</p>{% endif %}
+                                </div>
+                            </li>
+                        {% empty %}
+                            <li>
+                                <span class="timeline-punto">&#128229;</span>
+                                <div class="timeline-cuerpo">
+                                    <strong>Sin eventos registrados</strong>
+                                    <small>Actualice el estado para agregar actividad</small>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </section>
+        </main>
+    </div>
+</div>
+{% endblock %}

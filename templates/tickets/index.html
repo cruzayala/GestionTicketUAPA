@@ -1,0 +1,95 @@
+{% extends "tickets/base.html" %}
+{% load static %}
+{% block title %}GestionTicket UAPA{% endblock %}
+{% block page %}inicio{% endblock %}
+{% block content %}
+<header class="landing-header">
+    <a class="logo-principal" href="{% url 'home' %}">
+        <span class="logo-icono">&#127915;</span>
+        <span class="logo-resaltado">Soporte</span>
+        <span class="logo-separador">|</span>
+        <span class="logo-normal">Tickets</span>
+    </a>
+    <nav class="landing-nav">
+        <a href="{% url 'home' %}">Inicio</a>
+        <a href="{% url 'ticket_contact' %}">Crear ticket</a>
+        <a href="#buscar-ticket-modal">Buscar ticket</a>
+        <a href="{% url 'login' %}">Iniciar sesion</a>
+    </nav>
+</header>
+
+<main class="landing">
+    <section class="hero">
+        <div class="hero-texto">
+            <p class="etiqueta">Portal de ayuda</p>
+            <h1>Sistema de tickets para soporte y seguimiento</h1>
+            <p>GestionTicket UAPA permite registrar solicitudes de ayuda y revisar tickets desde un panel de soporte.</p>
+            <div class="acciones">
+                <a class="boton-principal" href="{% url 'ticket_contact' %}">Crear ticket <span class="boton-flecha">&rarr;</span></a>
+                <a class="boton-secundario" href="#buscar-ticket-modal">Buscar ticket</a>
+            </div>
+        </div>
+        <aside class="hero-panel">
+            <img src="{% static 'img/soporte-helpdesk.png' %}" alt="Agente de soporte atendiendo tickets por telefono">
+            <div class="hero-panel-info">
+                <strong>Mesa de ayuda</strong>
+                <span>Solicitudes, seguimiento y soporte</span>
+            </div>
+        </aside>
+    </section>
+
+    <section class="hero-features">
+        <article class="feature-card">
+            <span class="feature-icono">&#9889;</span>
+            <div>
+                <strong>Tickets en minutos</strong>
+                <p>Cree solicitudes en pasos sencillos sin necesidad de registrarse.</p>
+            </div>
+        </article>
+        <article class="feature-card">
+            <span class="feature-icono">&#128270;</span>
+            <div>
+                <strong>Seguimiento en vivo</strong>
+                <p>Consulte el estado de su ticket con su numero de seguimiento.</p>
+            </div>
+        </article>
+        <article class="feature-card">
+            <span class="feature-icono">&#128172;</span>
+            <div>
+                <strong>Soporte cercano</strong>
+                <p>Equipo de soporte UAPA disponible para responder cada solicitud.</p>
+            </div>
+        </article>
+    </section>
+</main>
+
+<section class="modal" id="buscar-ticket-modal">
+    <div class="modal-card">
+        <header class="modal-header">
+            <div>
+                <p class="etiqueta">Seguimiento</p>
+                <h2>Buscar estado de ticket</h2>
+            </div>
+            <a href="{% url 'home' %}" class="modal-cerrar">Cerrar</a>
+        </header>
+        <p class="modal-texto">Ingrese el numero de ticket para consultar el estado de la solicitud.</p>
+        {% if error %}
+            <div class="mensaje-form mensaje-error">{{ error }}</div>
+        {% endif %}
+        <form class="busqueda-form" method="post">
+            {% csrf_token %}
+            <label for="id_number">Numero de ticket</label>
+            <div class="input-icon">
+                <span class="input-emoji">&#128269;</span>
+                {{ form.number }}
+            </div>
+            <button type="submit">Buscar ticket <span class="boton-flecha">&rarr;</span></button>
+        </form>
+        <div class="estado-mini">
+            <span>Ejemplo</span>
+            <strong>GT-2026-001</strong>
+            <small>Estado: En proceso</small>
+        </div>
+    </div>
+</section>
+{% endblock %}

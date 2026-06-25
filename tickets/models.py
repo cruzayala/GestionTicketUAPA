@@ -52,6 +52,28 @@ class Ticket(models.Model):
     def __str__(self):
         return self.number
 
+    @property
+    def priority_class(self):
+        return f"prioridad-{self.priority.lower()}"
+
+    @property
+    def status_class(self):
+        if self.status == "En proceso":
+            return "estado-proceso"
+        if self.status == "Cerrado":
+            return "estado-cerrado"
+        return "estado-abierto"
+
+    @property
+    def category_badge(self):
+        if self.category == "Administrativa":
+            return "Admin"
+        if self.category == "Plataforma virtual":
+            return "Virtual"
+        if self.category == "Otro":
+            return "Otro"
+        return "Tecnico"
+
 
 class TicketEvent(models.Model):
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name="events")

@@ -32,10 +32,10 @@
     </nav>
 
     <div class="sidebar-usuario">
-        <span class="sidebar-avatar">AS</span>
+        <span class="sidebar-avatar">{{ request.user.username|slice:":2"|upper }}</span>
         <div>
-            <strong>Equipo soporte</strong>
-            <small>soporte@uapa.edu</small>
+            <strong>{{ request.user.get_full_name|default:request.user.username }}</strong>
+            <small>{{ request.user.email|default:"Cuenta administrativa" }}</small>
         </div>
     </div>
 </aside>

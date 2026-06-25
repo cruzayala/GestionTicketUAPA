@@ -1,12 +1,13 @@
-from django.shortcuts import get_object_or_404, redirect, render
 from django.db.models import Q
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
+from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import ContactForm, LoginForm, SearchTicketForm, StatusForm, TicketDetailForm
 from .models import Ticket, TicketEvent
 
 
 def support_required(request):
-    return bool(request.session.get("support_user"))
+    return request.user.is_authenticated and request.user.is_staff
 
 
 def home(request):
@@ -21,20 +22,23 @@ def home(request):
 
 
 def login_view(request):
+    if support_required(request):
+        return redirect("panel")
     form = LoginForm(request.POST or None)
     error = ""
     if request.method == "POST" and form.is_valid():
         username = form.cleaned_data["username"].strip()
         password = form.cleaned_data["password"].strip()
-        if username == "admin" and password == "1234":
-            request.session["support_user"] = "Admin"
+        user = authenticate(request, username=username, password=password)
+        if user and user.is_staff:
+            auth_login(request, user)
             return redirect("panel")
-        error = "Usuario o contrasena incorrectos."
+        error = "Usuario o contrasena incorrectos, o la cuenta no tiene acceso administrativo."
     return render(request, "tickets/login.html", {"form": form, "error": error})
 
 
 def logout_view(request):
-    request.session.flush()
+    auth_logout(request)
     return redirect("home")
 
 

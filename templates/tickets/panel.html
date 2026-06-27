@@ -1,0 +1,129 @@
+{% extends "tickets/base.html" %}
+{% block title %}Panel - GestionTicket UAPA{% endblock %}
+{% block page %}panel{% endblock %}
+{% block content %}
+<div class="layout">
+    {% include "tickets/sidebar.html" with active="panel" %}
+    <div class="contenido">
+        <header class="encabezado">
+            <div>
+                <p class="etiqueta">Panel principal</p>
+                <h1>Hola, equipo de soporte</h1>
+                <p class="sub-titulo">Resumen general de los tickets de la mesa de ayuda.</p>
+            </div>
+            <div class="acciones">
+                <div class="bienvenida">
+                    <span class="sidebar-avatar">AS</span>
+                    <div>
+                        <strong>Admin</strong>
+                        <small>En linea</small>
+                    </div>
+                </div>
+                <a class="boton-principal" href="{% url 'ticket_contact' %}">Crear ticket <span class="boton-flecha">&rarr;</span></a>
+            </div>
+        </header>
+
+        <main>
+            <section class="stats" aria-label="Resumen de tickets">
+                <article class="stat-card naranja">
+                    <div class="stat-card-top">
+                        <span class="stat-icono">&#128221;</span>
+                        <span class="stat-delta">Hoy</span>
+                    </div>
+                    <span class="stat-label">Tickets abiertos</span>
+                    <strong class="stat-numero">{{ open_count }}</strong>
+                    <div class="stat-mini"><span style="width: 70%"></span></div>
+                </article>
+                <article class="stat-card azul">
+                    <div class="stat-card-top">
+                        <span class="stat-icono">&#9203;</span>
+                        <span class="stat-delta">Actual</span>
+                    </div>
+                    <span class="stat-label">En proceso</span>
+                    <strong class="stat-numero">{{ process_count }}</strong>
+                    <div class="stat-mini"><span style="width: 45%"></span></div>
+                </article>
+                <article class="stat-card verde">
+                    <div class="stat-card-top">
+                        <span class="stat-icono">&#10003;</span>
+                        <span class="stat-delta">Total</span>
+                    </div>
+                    <span class="stat-label">Cerrados</span>
+                    <strong class="stat-numero">{{ closed_count }}</strong>
+                    <div class="stat-mini"><span style="width: 85%"></span></div>
+                </article>
+                <article class="stat-card morado">
+                    <div class="stat-card-top">
+                        <span class="stat-icono">&#9201;</span>
+                        <span class="stat-delta baja">Meta</span>
+                    </div>
+                    <span class="stat-label">Tiempo medio</span>
+                    <strong class="stat-numero">2.4h</strong>
+                    <div class="stat-mini"><span style="width: 60%"></span></div>
+                </article>
+            </section>
+
+            <section class="panel-doble">
+                <article class="panel">
+                    <div class="panel-titulo">
+                        <h2>Tickets prioritarios</h2>
+                        <a href="{% url 'ticket_list' %}">Ver todos</a>
+                    </div>
+                    <ul class="tickets-tabla">
+                        {% for ticket in priority_tickets %}
+                            <li>
+                                <span class="tabla-id">{{ ticket.number }}</span>
+                                <div class="tabla-asunto">
+                                    <strong>{{ ticket.subject }}</strong>
+                                    <small>{{ ticket.category }} - {{ ticket.created_at|date:"d/m/Y H:i" }}</small>
+                                </div>
+                                <span class="cat-badge">&#128221; {{ ticket.category_badge }}</span>
+                                <span class="prioridad-badge {{ ticket.priority_class }}">{{ ticket.priority }}</span>
+                                <a class="boton-ver" href="{% url 'ticket_manage' ticket.number %}">Ver</a>
+                            </li>
+                        {% empty %}
+                            <li>
+                                <div class="tabla-asunto">
+                                    <strong>No hay tickets de prioridad alta</strong>
+                                    <small>Cuando existan apareceran aqui</small>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </article>
+
+                <article class="panel">
+                    <div class="panel-titulo">
+                        <h2>Actividad reciente</h2>
+                        <span class="punto-vivo"></span>
+                    </div>
+                    <ul class="timeline">
+                        {% for ticket in recent_tickets %}
+                            <li>
+                                <span class="timeline-punto">&#128229;</span>
+                                <div class="timeline-cuerpo">
+                                    <strong>{{ ticket.number }} - {{ ticket.subject }}</strong>
+                                    <small>{{ ticket.created_at|date:"d/m/Y H:i" }}</small>
+                                </div>
+                            </li>
+                        {% empty %}
+                            <li>
+                                <span class="timeline-punto">&#128221;</span>
+                                <div class="timeline-cuerpo">
+                                    <strong>No hay actividad reciente</strong>
+                                    <small>Los tickets nuevos apareceran aqui</small>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </article>
+            </section>
+        </main>
+
+        <footer>
+            <p>GestionTicket UAPA</p>
+            <span>Proyecto Integrador ISW-306</span>
+        </footer>
+    </div>
+</div>
+{% endblock %}

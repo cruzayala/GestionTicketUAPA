@@ -821,7 +821,7 @@ footer p {
 
 .input-icon input,
 .input-icon select {
-    padding-left: 46px;
+    width: 100%;
 }
 
 .ticket-form input,
@@ -832,6 +832,40 @@ footer p {
     border-radius: 12px;
     padding: 13px 14px;
     transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.ticket-form .input-icon input,
+.ticket-form .input-icon select {
+    padding-left: 52px;
+}
+
+.config-grupo .input-icon input,
+.config-grupo .input-icon select {
+    padding-left: 52px;
+}
+
+.form-eliminar-ticket {
+    margin: 14px 0 22px;
+    padding-top: 14px;
+    border-top: 1px solid #e3e9f3;
+}
+
+.boton-peligro {
+    width: 100%;
+    border: 1px solid #fecaca;
+    border-radius: 12px;
+    padding: 12px 18px;
+    background: #fff1f2;
+    color: #b91c1c;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.boton-peligro:hover {
+    border-color: #fca5a5;
+    background: #fee2e2;
+    transform: translateY(-1px);
 }
 
 .ticket-form input:focus,
@@ -1520,6 +1554,57 @@ footer p {
     color: var(--naranja);
     font-weight: 700;
     font-size: 0.88rem;
+}
+
+.detalle-ticket-panel {
+    display: grid;
+    gap: 18px;
+}
+
+.detalle-destacado {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 18px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #fff7ed, #ffffff);
+    border: 1px solid #ffe1c8;
+}
+
+.detalle-destacado span:first-child {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--gris);
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.detalle-destacado strong {
+    color: var(--azul);
+    font-size: 1.2rem;
+    line-height: 1.3;
+}
+
+.descripcion-ticket {
+    display: grid;
+    gap: 8px;
+    padding: 18px;
+    border-radius: 16px;
+    background: #f8fafc;
+    border: 1px solid #e3e9f3;
+}
+
+.descripcion-ticket label {
+    color: var(--azul);
+    font-weight: 700;
+}
+
+.descripcion-ticket p {
+    margin: 0;
+    color: var(--texto);
+    line-height: 1.65;
 }
 
 .tickets-tabla {

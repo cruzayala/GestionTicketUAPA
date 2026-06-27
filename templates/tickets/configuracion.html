@@ -1,0 +1,61 @@
+{% extends "tickets/base.html" %}
+{% block title %}Configuracion - GestionTicket UAPA{% endblock %}
+{% block page %}configuracion{% endblock %}
+{% block content %}
+<div class="layout">
+    {% include "tickets/sidebar.html" with active="settings" %}
+    <div class="contenido">
+        <header class="encabezado">
+            <div>
+                <p class="etiqueta">Ajustes del sistema</p>
+                <h1>Configuracion</h1>
+                <p class="sub-titulo">Opciones preparadas para futuras mejoras del sistema.</p>
+            </div>
+        </header>
+
+        <main>
+            <section class="config-grupo">
+                <header class="config-grupo-cabecera">
+                    <span class="config-grupo-icono">&#128100;</span>
+                    <div>
+                        <h2>Perfil</h2>
+                        <p>Informacion visible para el equipo de soporte.</p>
+                    </div>
+                </header>
+                <div class="grid-dos">
+                    <div class="campo">
+                        <label>Nombre completo</label>
+                        <div class="input-icon">
+                            <span class="input-emoji">&#128100;</span>
+                            <input type="text" value="Equipo de soporte UAPA">
+                        </div>
+                    </div>
+                    <div class="campo">
+                        <label>Correo</label>
+                        <div class="input-icon">
+                            <span class="input-emoji">&#9993;</span>
+                            <input type="email" value="soporte@uapa.edu">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="config-grupo">
+                <header class="config-grupo-cabecera">
+                    <span class="config-grupo-icono">&#128274;</span>
+                    <div>
+                        <h2>Seguridad</h2>
+                        <p>La sesion del panel se maneja desde Django.</p>
+                    </div>
+                </header>
+                <a class="enlace-naranja" href="{% url 'logout' %}">Cerrar sesion &rarr;</a>
+            </section>
+        </main>
+
+        <footer>
+            <p>GestionTicket UAPA</p>
+            <span>Proyecto Integrador ISW-306</span>
+        </footer>
+    </div>
+</div>
+{% endblock %}

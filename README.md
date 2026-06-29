@@ -12,6 +12,18 @@ Sistema web para gestion de tickets de soporte.
 
 ## Instalacion
 
+En Windows PowerShell:
+
+```bash
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver
+```
+
+En Windows CMD:
+
 ```bash
 python -m venv .venv
 .venv\Scripts\activate
@@ -34,4 +46,15 @@ El acceso administrativo se valida contra la tabla de usuarios de Django en la b
 
 ```text
 database/schema.sql
+database/export.sql
+```
+
+El archivo `schema.sql` contiene la estructura de la base de datos y `export.sql` contiene una exportacion completa generada desde SQLite luego de ejecutar las migraciones.
+
+## Verificacion
+
+```bash
+python manage.py check
+python manage.py migrate
+python manage.py runserver
 ```

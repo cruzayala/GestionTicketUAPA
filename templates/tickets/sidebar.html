@@ -25,10 +25,13 @@
             <span class="menu-icono">&#9881;</span>
             Configuracion
         </a>
-        <a href="{% url 'logout' %}">
-            <span class="menu-icono">&#128682;</span>
-            Cerrar sesion
-        </a>
+        <form method="post" action="{% url 'logout' %}" class="sidebar-logout">
+            {% csrf_token %}
+            <button type="submit">
+                <span class="menu-icono">&#128682;</span>
+                Cerrar sesion
+            </button>
+        </form>
     </nav>
 
     <div class="sidebar-usuario">

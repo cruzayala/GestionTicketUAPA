@@ -357,6 +357,41 @@ a {
     font-weight: 700;
 }
 
+.sidebar-logout {
+    margin: 0;
+}
+
+.sidebar-logout button {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    font: inherit;
+    padding: 12px 14px;
+    text-align: left;
+}
+
+.sidebar-logout button:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.bootstrap-panel .table {
+    --bs-table-bg: transparent;
+    --bs-table-hover-bg: #f3f7ff;
+    margin: 0;
+}
+
+.bootstrap-panel .table th {
+    color: #5d6b84;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
 .menu-lateral a:hover,
 .menu-lateral .activo {
     background: rgba(246, 129, 33, 0.18);

@@ -14,7 +14,7 @@
             <a class="boton-principal" href="{% url 'ticket_contact' %}">Crear ticket <span class="boton-flecha">&rarr;</span></a>
         </header>
 
-        <form class="busqueda-bar" method="get">
+        <form class="busqueda-bar row g-2 align-items-end" method="get">
             <div class="input-icon">
                 <span class="input-emoji">&#128269;</span>
                 <input type="text" name="q" value="{{ query }}" placeholder="Buscar por numero, asunto o solicitante">
@@ -31,36 +31,50 @@
                 <option {% if priority == "Media" %}selected{% endif %}>Media</option>
                 <option {% if priority == "Baja" %}selected{% endif %}>Baja</option>
             </select>
-            <button type="submit" class="boton-secundario">Filtrar</button>
+            <button type="submit" class="btn btn-outline-secondary boton-secundario">Filtrar</button>
         </form>
 
-        <section class="panel">
+        <section class="panel bootstrap-panel">
             <div class="panel-titulo">
                 <h2>Todos los tickets</h2>
                 <span>{{ total }} resultados</span>
             </div>
-            <ul class="tickets-tabla">
+            <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0 tickets-tabla">
+                <thead>
+                    <tr>
+                        <th>Numero</th>
+                        <th>Solicitud</th>
+                        <th>Categoria</th>
+                        <th>Prioridad</th>
+                        <th>Estado</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
                 {% for ticket in tickets %}
-                    <li>
-                        <span class="tabla-id">{{ ticket.number }}</span>
-                        <div class="tabla-asunto">
+                    <tr>
+                        <td><span class="tabla-id">{{ ticket.number }}</span></td>
+                        <td><div class="tabla-asunto">
                             <strong>{{ ticket.subject }}</strong>
                             <small>{{ ticket.category }} - {{ ticket.created_at|date:"d/m/Y H:i" }}</small>
-                        </div>
-                        <span class="cat-badge">&#128221; {{ ticket.category_badge }}</span>
-                        <span class="prioridad-badge {{ ticket.priority_class }}">{{ ticket.priority }}</span>
-                        <span class="estado-badge {{ ticket.status_class }}">{{ ticket.status }}</span>
-                        <a class="boton-ver" href="{% url 'ticket_manage' ticket.number %}">Ver</a>
-                    </li>
+                        </div></td>
+                        <td><span class="cat-badge">&#128221; {{ ticket.category_badge }}</span></td>
+                        <td><span class="prioridad-badge {{ ticket.priority_class }}">{{ ticket.priority }}</span></td>
+                        <td><span class="estado-badge {{ ticket.status_class }}">{{ ticket.status }}</span></td>
+                        <td><a class="btn btn-sm btn-outline-primary boton-ver" href="{% url 'ticket_manage' ticket.number %}">Ver</a></td>
+                    </tr>
                 {% empty %}
-                    <li>
-                        <div class="tabla-asunto">
+                    <tr>
+                        <td colspan="6"><div class="tabla-asunto">
                             <strong>No hay tickets registrados</strong>
                             <small>Cree un ticket para iniciar el seguimiento</small>
-                        </div>
-                    </li>
+                        </div></td>
+                    </tr>
                 {% endfor %}
-            </ul>
+                </tbody>
+            </table>
+            </div>
         </section>
 
         <footer>

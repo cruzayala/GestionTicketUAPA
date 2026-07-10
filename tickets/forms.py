@@ -4,27 +4,27 @@ from .models import CATEGORY_CHOICES, PRIORITY_CHOICES, STATUS_CHOICES
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField(max_length=80, widget=forms.TextInput(attrs={"placeholder": "Usuario"}))
-    password = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder": "Contrasena"}))
+    username = forms.CharField(max_length=80, widget=forms.TextInput(attrs={"placeholder": "Usuario", "class": "form-control"}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder": "Contrasena", "class": "form-control"}))
 
 
 class SearchTicketForm(forms.Form):
-    number = forms.CharField(max_length=20, widget=forms.TextInput(attrs={"placeholder": "GT-2026-001"}))
+    number = forms.CharField(max_length=20, widget=forms.TextInput(attrs={"placeholder": "GT-2026-001", "class": "form-control"}))
 
 
 class ContactForm(forms.Form):
-    full_name = forms.CharField(max_length=120, widget=forms.TextInput(attrs={"placeholder": "Escriba su nombre"}))
-    email = forms.EmailField(widget=forms.EmailInput(attrs={"placeholder": "usuario@correo.com"}))
-    enrollment = forms.CharField(max_length=30, required=False, widget=forms.TextInput(attrs={"placeholder": "00-0000"}))
+    full_name = forms.CharField(max_length=120, widget=forms.TextInput(attrs={"placeholder": "Escriba su nombre", "class": "form-control"}))
+    email = forms.EmailField(widget=forms.EmailInput(attrs={"placeholder": "usuario@correo.com", "class": "form-control"}))
+    enrollment = forms.CharField(max_length=30, required=False, widget=forms.TextInput(attrs={"placeholder": "00-0000", "class": "form-control"}))
 
 
 class TicketDetailForm(forms.Form):
-    category = forms.ChoiceField(choices=CATEGORY_CHOICES)
-    priority = forms.ChoiceField(choices=PRIORITY_CHOICES)
-    subject = forms.CharField(max_length=160, widget=forms.TextInput(attrs={"placeholder": "Resumen breve del caso"}))
-    description = forms.CharField(widget=forms.Textarea(attrs={"rows": 5, "placeholder": "Describa con detalle lo que esta ocurriendo"}))
+    category = forms.ChoiceField(choices=CATEGORY_CHOICES, widget=forms.Select(attrs={"class": "form-select"}))
+    priority = forms.ChoiceField(choices=PRIORITY_CHOICES, widget=forms.Select(attrs={"class": "form-select"}))
+    subject = forms.CharField(max_length=160, widget=forms.TextInput(attrs={"placeholder": "Resumen breve del caso", "class": "form-control"}))
+    description = forms.CharField(widget=forms.Textarea(attrs={"rows": 5, "placeholder": "Describa con detalle lo que esta ocurriendo", "class": "form-control"}))
 
 
 class StatusForm(forms.Form):
-    status = forms.ChoiceField(choices=STATUS_CHOICES)
-    note = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows": 4, "placeholder": "Nota del cambio de estado"}))
+    status = forms.ChoiceField(choices=STATUS_CHOICES, widget=forms.Select(attrs={"class": "form-select"}))
+    note = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows": 4, "placeholder": "Nota del cambio de estado", "class": "form-control"}))

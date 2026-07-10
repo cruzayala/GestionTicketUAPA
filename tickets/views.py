@@ -1,13 +1,16 @@
 from django.db.models import Q
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import require_POST
 
-from .forms import ContactForm, LoginForm, SearchTicketForm, StatusForm, TicketDetailForm
+from .forms import ContactForm, LoginForm, SearchTicketForm, TicketDetailForm, TicketUpdateForm
 from .models import Ticket, TicketEvent
 
 
-def support_required(request):
-    return request.user.is_authenticated and request.user.is_staff
+def support_required(user):
+    return user.is_authenticated and user.is_staff
 
 
 def home(request):
@@ -22,7 +25,7 @@ def home(request):
 
 
 def login_view(request):
-    if support_required(request):
+    if support_required(request.user):
         return redirect("panel")
     form = LoginForm(request.POST or None)
     error = ""
@@ -37,14 +40,14 @@ def login_view(request):
     return render(request, "tickets/login.html", {"form": form, "error": error})
 
 
+@require_POST
 def logout_view(request):
     auth_logout(request)
     return redirect("home")
 
 
+@user_passes_test(support_required, login_url="login")
 def panel(request):
-    if not support_required(request):
-        return redirect("login")
     tickets = Ticket.objects.all()
     context = {
         "open_count": tickets.filter(status="Abierto").count(),
@@ -56,9 +59,8 @@ def panel(request):
     return render(request, "tickets/panel.html", context)
 
 
+@user_passes_test(support_required, login_url="login")
 def ticket_list(request):
-    if not support_required(request):
-        return redirect("login")
     tickets = Ticket.objects.all()
     query = request.GET.get("q", "").strip()
     status = request.GET.get("status", "Todos")
@@ -111,6 +113,8 @@ def ticket_detail_form(request):
 
 def ticket_confirm(request):
     number = request.session.get("last_ticket")
+    if not number:
+        return redirect("home")
     ticket = get_object_or_404(Ticket, number=number)
     return render(request, "tickets/ticket_confirmacion.html", {"ticket": ticket})
 
@@ -120,31 +124,39 @@ def ticket_status(request, number):
     return render(request, "tickets/estado_ticket.html", {"ticket": ticket})
 
 
+@user_passes_test(support_required, login_url="login")
 def ticket_manage(request, number):
-    if not support_required(request):
-        return redirect("login")
     ticket = get_object_or_404(Ticket, number=number.upper())
-    form = StatusForm(request.POST or None, initial={"status": ticket.status})
+    form = TicketUpdateForm(request.POST or None, initial={
+        "category": ticket.category,
+        "priority": ticket.priority,
+        "subject": ticket.subject,
+        "description": ticket.description,
+        "status": ticket.status,
+    })
     if request.method == "POST" and form.is_valid():
+        ticket.category = form.cleaned_data["category"]
+        ticket.priority = form.cleaned_data["priority"]
+        ticket.subject = form.cleaned_data["subject"]
+        ticket.description = form.cleaned_data["description"]
         ticket.status = form.cleaned_data["status"]
         ticket.save()
         note = form.cleaned_data["note"].strip()
-        TicketEvent.objects.create(ticket=ticket, title=f"Estado actualizado a {ticket.status}", note=note)
+        TicketEvent.objects.create(ticket=ticket, title="Ticket actualizado", note=note)
+        messages.success(request, "Los cambios del ticket fueron guardados correctamente.")
         return redirect("ticket_manage", number=ticket.number)
     return render(request, "tickets/ticket_manage.html", {"ticket": ticket, "form": form})
 
 
+@user_passes_test(support_required, login_url="login")
+@require_POST
 def ticket_delete(request, number):
-    if not support_required(request):
-        return redirect("login")
     ticket = get_object_or_404(Ticket, number=number.upper())
-    if request.method == "POST":
-        ticket.delete()
-        return redirect("ticket_list")
-    return redirect("ticket_manage", number=ticket.number)
+    ticket.delete()
+    messages.success(request, "El ticket fue eliminado correctamente.")
+    return redirect("ticket_list")
 
 
+@user_passes_test(support_required, login_url="login")
 def settings_view(request):
-    if not support_required(request):
-        return redirect("login")
     return render(request, "tickets/configuracion.html")

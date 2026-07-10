@@ -392,6 +392,16 @@ a {
     text-transform: uppercase;
 }
 
+.mensajes-sistema {
+    left: 50%;
+    max-width: 560px;
+    position: fixed;
+    top: 18px;
+    transform: translateX(-50%);
+    width: calc(100% - 32px);
+    z-index: 1200;
+}
+
 .menu-lateral a:hover,
 .menu-lateral .activo {
     background: rgba(246, 129, 33, 0.18);

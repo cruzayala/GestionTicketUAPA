@@ -71,6 +71,24 @@
                 </div>
                 <form method="post" class="ticket-form">
                     {% csrf_token %}
+                    <div class="grid-dos">
+                        <div class="campo">
+                            <label for="id_category">Categoria</label>
+                            {{ form.category }}
+                        </div>
+                        <div class="campo">
+                            <label for="id_priority">Prioridad</label>
+                            {{ form.priority }}
+                        </div>
+                    </div>
+                    <div class="campo">
+                        <label for="id_subject">Asunto</label>
+                        {{ form.subject }}
+                    </div>
+                    <div class="campo">
+                        <label for="id_description">Descripcion</label>
+                        {{ form.description }}
+                    </div>
                     <div class="campo">
                         <label for="id_status">Estado</label>
                         <div class="input-icon">
@@ -84,9 +102,9 @@
                     </div>
                     <button type="submit" class="boton-principal">Guardar cambio <span class="boton-flecha">&rarr;</span></button>
                 </form>
-                <form method="post" action="{% url 'ticket_delete' ticket.number %}" class="form-eliminar-ticket" onsubmit="return confirm('Esta seguro de eliminar este ticket? Esta accion no se puede deshacer.');">
+                <form method="post" action="{% url 'ticket_delete' ticket.number %}" class="form-eliminar-ticket">
                     {% csrf_token %}
-                    <button type="submit" class="boton-peligro">Eliminar ticket</button>
+                    <button type="submit" class="btn btn-outline-danger boton-peligro">Eliminar ticket</button>
                 </form>
                 <div>
                     <label class="label-seccion">Historial</label>

@@ -104,17 +104,38 @@
                             <label for="id_category">Categoria</label>
                             {{ form.category }}
                         </div>
-                        <div class="campo ticket-management-full">
-                            <label for="id_subject">Asunto</label>
+                        <div class="campo ticket-management-subject">
+                            <label for="id_subject" class="ticket-field-heading">
+                                <span class="ticket-field-icon">&#128204;</span>
+                                <span>Asunto<small>Resumen breve de la solicitud</small></span>
+                            </label>
                             {{ form.subject }}
                         </div>
-                        <div class="campo ticket-management-half">
-                            <label for="id_description">Descripcion</label>
+                        <div class="campo ticket-management-description">
+                            <label for="id_description" class="ticket-field-heading">
+                                <span class="ticket-field-icon">&#128196;</span>
+                                <span>Descripcion<small>Informacion principal del caso</small></span>
+                            </label>
                             {{ form.description }}
                         </div>
-                        <div class="campo ticket-management-half">
-                            <label for="id_note">Respuesta para el solicitante</label>
-                            {{ form.note }}
+                        <div class="campo ticket-response-composer">
+                            <div class="ticket-response-heading">
+                                <label for="id_note" class="ticket-field-heading">
+                                    <span class="ticket-field-icon">&#128172;</span>
+                                    <span>Responder<small>Agregue una actualizacion al seguimiento</small></span>
+                                </label>
+                                <span class="ticket-response-visibility">Visible para el solicitante</span>
+                            </div>
+                            <div class="ticket-response-box">
+                                <span class="ticket-response-avatar">{{ request.user.username|slice:":2"|upper }}</span>
+                                <div class="ticket-response-input">
+                                    {{ form.note }}
+                                    <div class="ticket-response-meta">
+                                        <span>Equipo de soporte</span>
+                                        <strong>Se registrara al guardar el ticket</strong>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </form>

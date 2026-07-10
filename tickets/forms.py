@@ -43,7 +43,7 @@ class TicketUpdateForm(forms.Form):
     subject = forms.CharField(max_length=160, widget=forms.TextInput(attrs={"class": "form-control"}))
     description = forms.CharField(widget=forms.Textarea(attrs={"rows": 5, "class": "form-control"}))
     status = forms.ChoiceField(choices=STATUS_CHOICES, widget=forms.Select(attrs={"class": "form-select"}))
-    note = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows": 4, "placeholder": "Nota del cambio de estado", "class": "form-control"}))
+    note = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows": 4, "placeholder": "Escriba una respuesta o actualizacion para el solicitante", "class": "form-control"}))
 
     def __init__(self, *args, staff_users=None, **kwargs):
         super().__init__(*args, **kwargs)

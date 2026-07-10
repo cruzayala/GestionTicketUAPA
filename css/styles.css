@@ -382,7 +382,9 @@ a {
 .bootstrap-panel .table {
     --bs-table-bg: transparent;
     --bs-table-hover-bg: #f3f7ff;
+    display: table;
     margin: 0;
+    width: 100%;
 }
 
 .bootstrap-panel .table th {
@@ -515,6 +517,7 @@ button:not(.chip):not(.copiar-boton):not(.boton-ver):not(.adjuntar-boton):hover 
 
 .panel-titulo {
     display: flex;
+    align-items: flex-start;
     justify-content: space-between;
     gap: 12px;
     margin-bottom: 18px;
@@ -926,6 +929,10 @@ footer p {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 14px;
+}
+
+.admin-edit-grid {
+    grid-template-columns: 1fr;
 }
 
 .opciones-radio {
@@ -1784,6 +1791,16 @@ footer p {
     min-width: 240px;
 }
 
+.busqueda-bar select {
+    flex: 0 1 180px;
+    width: auto;
+}
+
+.busqueda-bar .boton-secundario {
+    flex: 0 0 auto;
+    width: auto;
+}
+
 .busqueda-bar input,
 .busqueda-bar select {
     background: #f8fafc;
@@ -2302,10 +2319,33 @@ footer p {
 }
 
 @media (max-width: 560px) {
+    body {
+        overflow-x: hidden;
+    }
+
     .landing,
     .contenido,
     .sidebar {
         padding: 18px;
+    }
+
+    .layout,
+    .contenido,
+    .sidebar {
+        min-width: 0;
+    }
+
+    .busqueda-bar .input-icon,
+    .busqueda-bar select,
+    .busqueda-bar .boton-secundario {
+        flex: 1 1 100%;
+        min-width: 0;
+        width: 100%;
+    }
+
+    .table-responsive {
+        max-width: 100%;
+        overflow-x: auto;
     }
 
     .hero {

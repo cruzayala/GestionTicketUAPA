@@ -1590,6 +1590,81 @@ footer p {
     margin-bottom: 26px;
 }
 
+.admin-create-layout {
+    align-items: start;
+    display: grid;
+    gap: 18px;
+    grid-template-columns: minmax(0, 1fr) 220px;
+}
+
+.admin-ticket-form {
+    display: grid;
+    gap: 26px;
+}
+
+.admin-form-section {
+    border: 0;
+    border-top: 1px solid var(--borde);
+    margin: 0;
+    padding: 22px 0 0;
+}
+
+.admin-form-section:first-child {
+    border-top: 0;
+    padding-top: 0;
+}
+
+.admin-form-section legend {
+    color: var(--azul);
+    font-size: 1.05rem;
+    font-weight: 800;
+    margin-bottom: 16px;
+    padding: 0;
+}
+
+.admin-form-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.admin-field-wide {
+    grid-column: 1 / -1;
+}
+
+.admin-form-actions {
+    align-items: center;
+    border-top: 1px solid var(--borde);
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    padding-top: 20px;
+}
+
+.admin-create-aside {
+    background: var(--azul);
+    border-radius: 14px;
+    color: var(--blanco);
+    display: grid;
+    gap: 5px;
+    padding: 22px;
+}
+
+.admin-create-aside span {
+    color: rgba(255, 255, 255, 0.62);
+    font-size: 0.8rem;
+    margin-top: 12px;
+    text-transform: uppercase;
+}
+
+.admin-create-aside span:first-child {
+    margin-top: 0;
+}
+
+.admin-create-aside strong {
+    font-size: 1rem;
+}
+
 .panel {
     padding: 22px;
     border-radius: 18px;
@@ -2254,6 +2329,9 @@ footer p {
     .panel-doble {
         grid-template-columns: 1fr;
     }
+    .admin-create-layout {
+        grid-template-columns: 1fr;
+    }
     .hero-features {
         grid-template-columns: 1fr;
     }
@@ -2377,6 +2455,15 @@ footer p {
 
     .estado-mini {
         grid-template-columns: 1fr;
+    }
+
+    .admin-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-form-actions {
+        align-items: stretch;
+        flex-direction: column-reverse;
     }
 
     .menu-lateral {

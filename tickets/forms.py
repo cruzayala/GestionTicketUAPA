@@ -25,6 +25,16 @@ class TicketDetailForm(forms.Form):
     description = forms.CharField(widget=forms.Textarea(attrs={"rows": 5, "placeholder": "Describa con detalle lo que esta ocurriendo", "class": "form-control"}))
 
 
+class AdminTicketCreateForm(forms.Form):
+    full_name = forms.CharField(max_length=120, widget=forms.TextInput(attrs={"placeholder": "Nombre completo del solicitante", "class": "form-control"}))
+    email = forms.EmailField(widget=forms.EmailInput(attrs={"placeholder": "correo@ejemplo.com", "class": "form-control"}))
+    enrollment = forms.CharField(max_length=30, required=False, widget=forms.TextInput(attrs={"placeholder": "Opcional", "class": "form-control"}))
+    category = forms.ChoiceField(choices=CATEGORY_CHOICES, widget=forms.Select(attrs={"class": "form-select"}))
+    priority = forms.ChoiceField(choices=PRIORITY_CHOICES, initial="Media", widget=forms.Select(attrs={"class": "form-select"}))
+    subject = forms.CharField(max_length=160, widget=forms.TextInput(attrs={"placeholder": "Resumen claro del caso", "class": "form-control"}))
+    description = forms.CharField(widget=forms.Textarea(attrs={"rows": 6, "placeholder": "Detalle importante para atender la solicitud", "class": "form-control"}))
+
+
 class TicketUpdateForm(forms.Form):
     category = forms.ChoiceField(choices=CATEGORY_CHOICES, widget=forms.Select(attrs={"class": "form-select"}))
     priority = forms.ChoiceField(choices=PRIORITY_CHOICES, widget=forms.Select(attrs={"class": "form-select"}))

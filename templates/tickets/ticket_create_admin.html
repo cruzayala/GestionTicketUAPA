@@ -1,0 +1,83 @@
+{% extends "tickets/base.html" %}
+{% block title %}Nuevo ticket - GestionTicket UAPA{% endblock %}
+{% block page %}ticket-create-admin{% endblock %}
+{% block content %}
+<div class="layout">
+    {% include "tickets/sidebar.html" with active="create" %}
+    <div class="contenido">
+        <header class="encabezado">
+            <div>
+                <p class="etiqueta">Registro interno</p>
+                <h1>Nuevo ticket</h1>
+                <p class="sub-titulo">Registre una solicitud recibida por el equipo de soporte.</p>
+            </div>
+            <a class="boton-secundario" href="{% url 'ticket_list' %}">Cancelar</a>
+        </header>
+
+        <main class="admin-create-layout">
+            <form method="post" class="panel admin-ticket-form">
+                {% csrf_token %}
+                {% if form.errors %}
+                    <div class="alert alert-danger mb-0" role="alert">Revise los campos obligatorios antes de registrar el ticket.</div>
+                {% endif %}
+                <fieldset class="admin-form-section">
+                    <legend>Datos del solicitante</legend>
+                    <div class="admin-form-grid">
+                        <div class="campo admin-field-wide">
+                            <label for="id_full_name">Nombre completo</label>
+                            {{ form.full_name }}
+                        </div>
+                        <div class="campo">
+                            <label for="id_email">Correo</label>
+                            {{ form.email }}
+                        </div>
+                        <div class="campo">
+                            <label for="id_enrollment">Matricula</label>
+                            {{ form.enrollment }}
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset class="admin-form-section">
+                    <legend>Detalle de la solicitud</legend>
+                    <div class="admin-form-grid">
+                        <div class="campo">
+                            <label for="id_category">Categoria</label>
+                            {{ form.category }}
+                        </div>
+                        <div class="campo">
+                            <label for="id_priority">Prioridad</label>
+                            {{ form.priority }}
+                        </div>
+                        <div class="campo admin-field-wide">
+                            <label for="id_subject">Asunto</label>
+                            {{ form.subject }}
+                        </div>
+                        <div class="campo admin-field-wide">
+                            <label for="id_description">Descripcion</label>
+                            {{ form.description }}
+                        </div>
+                    </div>
+                </fieldset>
+
+                <div class="admin-form-actions">
+                    <a class="boton-secundario" href="{% url 'ticket_list' %}">Cancelar</a>
+                    <button type="submit" class="boton-principal">Registrar ticket <span class="boton-flecha">&rarr;</span></button>
+                </div>
+            </form>
+
+            <aside class="admin-create-aside">
+                <span>Estado inicial</span>
+                <strong>Abierto</strong>
+                <span>Canal</span>
+                <strong>Registro interno</strong>
+            </aside>
+        </main>
+
+        <footer>
+            <p>GestionTicket UAPA</p>
+            <span>Proyecto Integrador ISW-306</span>
+        </footer>
+    </div>
+</div>
+{% endblock %}

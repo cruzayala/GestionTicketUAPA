@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
-from .forms import ContactForm, LoginForm, SearchTicketForm, TicketCommentForm, TicketDetailForm, TicketUpdateForm
+from .forms import AdminTicketCreateForm, ContactForm, LoginForm, SearchTicketForm, TicketCommentForm, TicketDetailForm, TicketUpdateForm
 from .models import Ticket, TicketEvent
 
 
@@ -79,6 +79,31 @@ def ticket_list(request):
         "total": tickets.count(),
     }
     return render(request, "tickets/tickets.html", context)
+
+
+@user_passes_test(support_required, login_url="login")
+def ticket_create_admin(request):
+    form = AdminTicketCreateForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        ticket = Ticket.objects.create(
+            full_name=form.cleaned_data["full_name"],
+            email=form.cleaned_data["email"],
+            enrollment=form.cleaned_data["enrollment"],
+            category=form.cleaned_data["category"],
+            priority=form.cleaned_data["priority"],
+            subject=form.cleaned_data["subject"],
+            description=form.cleaned_data["description"],
+        )
+        TicketEvent.objects.create(
+            ticket=ticket,
+            title="Ticket registrado por soporte",
+            note="La solicitud fue registrada desde el panel administrativo.",
+            author_name=request.user.get_full_name() or request.user.username,
+            author_role="Soporte",
+        )
+        messages.success(request, f"El ticket {ticket.number} fue creado correctamente.")
+        return redirect("ticket_manage", number=ticket.number)
+    return render(request, "tickets/ticket_create_admin.html", {"form": form})
 
 
 def ticket_contact(request):

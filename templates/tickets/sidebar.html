@@ -17,7 +17,7 @@
             <span class="menu-icono">&#128221;</span>
             Tickets
         </a>
-        <a href="{% url 'ticket_contact' %}">
+        <a href="{% url 'ticket_create_admin' %}" class="{% if active == 'create' %}activo{% endif %}">
             <span class="menu-icono">&#10133;</span>
             Crear ticket
         </a>

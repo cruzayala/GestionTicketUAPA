@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuracion - GestionTicket UAPA</title>
+    <link rel="icon" href="data:,">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <header class="marca">
+                <a class="logo-principal logo-sidebar logo-claro" href="panel.html">
+                    <span class="logo-icono">&#127915;</span>
+                    <span class="logo-resaltado">Soporte</span>
+                    <span class="logo-separador">|</span>
+                    <span class="logo-normal">Tickets</span>
+                </a>
+            </header>
+
+            <nav class="menu-lateral">
+                <a href="panel.html">
+                    <span class="menu-icono">&#127968;</span>
+                    Dashboard
+                </a>
+                <a href="tickets.html">
+                    <span class="menu-icono">&#128221;</span>
+                    Tickets
+                </a>
+                <a href="crear-ticket.html">
+                    <span class="menu-icono">&#10133;</span>
+                    Crear ticket
+                </a>
+                <a href="configuracion.html" class="activo">
+                    <span class="menu-icono">&#9881;</span>
+                    Configuracion
+                </a>
+                <a href="index.html">
+                    <span class="menu-icono">&#128682;</span>
+                    Cerrar sesion
+                </a>
+            </nav>
+
+            <div class="sidebar-usuario">
+                <span class="sidebar-avatar">AS</span>
+                <div>
+                    <strong>Equipo soporte</strong>
+                    <small>soporte@uapa.edu</small>
+                </div>
+            </div>
+        </aside>
+
+        <div class="contenido">
+            <header class="encabezado">
+                <div>
+                    <p class="etiqueta">Ajustes del sistema</p>
+                    <h1>Configuracion</h1>
+                    <p class="sub-titulo">Personalice su perfil, notificaciones y preferencias de la plataforma.</p>
+                </div>
+                <button type="button" class="boton-principal">
+                    Guardar cambios
+                    <span class="boton-flecha">&rarr;</span>
+                </button>
+            </header>
+
+            <main>
+                <section class="config-grupo">
+                    <header class="config-grupo-cabecera">
+                        <span class="config-grupo-icono">&#128100;</span>
+                        <div>
+                            <h2>Perfil</h2>
+                            <p>Informacion visible para el equipo de soporte.</p>
+                        </div>
+                    </header>
+
+                    <div class="grid-dos">
+                        <div class="campo">
+                            <label for="nombre-config">Nombre completo</label>
+                            <div class="input-icon">
+                                <span class="input-emoji">&#128100;</span>
+                                <input type="text" id="nombre-config" value="Equipo de soporte UAPA">
+                            </div>
+                        </div>
+                        <div class="campo">
+                            <label for="correo-config">Correo</label>
+                            <div class="input-icon">
+                                <span class="input-emoji">&#9993;</span>
+                                <input type="email" id="correo-config" value="soporte@uapa.edu">
+                            </div>
+                        </div>
+                        <div class="campo">
+                            <label for="telefono-config">Telefono</label>
+                            <div class="input-icon">
+                                <span class="input-emoji">&#128222;</span>
+                                <input type="tel" id="telefono-config" placeholder="+1 (000) 000-0000">
+                            </div>
+                        </div>
+                        <div class="campo">
+                            <label for="rol-config">Rol</label>
+                            <div class="input-icon">
+                                <span class="input-emoji">&#127891;</span>
+                                <select id="rol-config">
+                                    <option>Administrador</option>
+                                    <option>Agente</option>
+                                    <option>Supervisor</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="config-grupo">
+                    <header class="config-grupo-cabecera">
+                        <span class="config-grupo-icono">&#128276;</span>
+                        <div>
+                            <h2>Notificaciones</h2>
+                            <p>Elija como recibir avisos del sistema.</p>
+                        </div>
+                    </header>
+
+                    <div class="toggle-fila">
+                        <div>
+                            <strong>Correo electronico</strong>
+                            <small>Recibir cada cambio de estado de los tickets.</small>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span></span>
+                        </label>
+                    </div>
+
+                    <div class="toggle-fila">
+                        <div>
+                            <strong>Mensajes SMS</strong>
+                            <small>Notificaciones para tickets de prioridad alta.</small>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox">
+                            <span></span>
+                        </label>
+                    </div>
+
+                    <div class="toggle-fila">
+                        <div>
+                            <strong>Notificaciones en navegador</strong>
+                            <small>Alertas en tiempo real desde el panel.</small>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span></span>
+                        </label>
+                    </div>
+                </section>
+
+                <section class="config-grupo">
+                    <header class="config-grupo-cabecera">
+                        <span class="config-grupo-icono">&#127912;</span>
+                        <div>
+                            <h2>Preferencias</h2>
+                            <p>Ajustes visuales y de idioma.</p>
+                        </div>
+                    </header>
+
+                    <div class="grid-dos">
+                        <div class="campo">
+                            <label for="tema">Tema</label>
+                            <div class="input-icon">
+                                <span class="input-emoji">&#9728;</span>
+                                <select id="tema">
+                                    <option>Claro</option>
+                                    <option>Oscuro</option>
+                                    <option>Automatico</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="campo">
+                            <label for="idioma">Idioma</label>
+                            <div class="input-icon">
+                                <span class="input-emoji">&#127760;</span>
+                                <select id="idioma">
+                                    <option>Espanol</option>
+                                    <option>English</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="config-grupo">
+                    <header class="config-grupo-cabecera">
+                        <span class="config-grupo-icono">&#128274;</span>
+                        <div>
+                            <h2>Seguridad</h2>
+                            <p>Mantenga su cuenta protegida.</p>
+                        </div>
+                    </header>
+
+                    <div class="toggle-fila">
+                        <div>
+                            <strong>Autenticacion de dos pasos</strong>
+                            <small>Anada una capa extra de seguridad al ingresar.</small>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox">
+                            <span></span>
+                        </label>
+                    </div>
+
+                    <a class="enlace-naranja" href="#">Cambiar contrasena &rarr;</a>
+                </section>
+            </main>
+
+            <footer>
+                <p>GestionTicket UAPA</p>
+                <span>Proyecto Integrador ISW-306</span>
+            </footer>
+        </div>
+    </div>
+</body>
+</html>

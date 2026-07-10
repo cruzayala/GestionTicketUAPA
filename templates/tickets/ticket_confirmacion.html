@@ -1,0 +1,62 @@
+{% extends "tickets/base.html" %}
+{% block title %}Ticket creado - GestionTicket UAPA{% endblock %}
+{% block page %}ticket-confirmacion{% endblock %}
+{% block content %}
+<main class="pagina-ticket">
+    <section class="ticket-shell">
+        <aside class="ticket-aside">
+            <a class="logo-principal logo-claro" href="{% url 'home' %}">
+                <span class="logo-icono">&#127915;</span>
+                <span class="logo-resaltado">Soporte</span>
+                <span class="logo-separador">|</span>
+                <span class="logo-normal">Tickets</span>
+            </a>
+            <div class="aside-titulo">
+                <p class="etiqueta etiqueta-clara">Ticket creado</p>
+                <h2>Su solicitud fue registrada correctamente</h2>
+                <p class="aside-texto">Guarde el numero de ticket para dar seguimiento a su caso.</p>
+            </div>
+            <div class="aside-pie">
+                <span class="punto-vivo"></span>
+                <p>Solicitud recibida</p>
+            </div>
+        </aside>
+
+        <section class="ticket-form">
+            <div class="ticket-form-cabecera">
+                <div>
+                    <p class="etiqueta">Confirmacion</p>
+                    <h1>Ticket registrado</h1>
+                    <p class="sub-texto">El equipo de soporte revisara su solicitud.</p>
+                </div>
+                <div class="badge-paso">&#10003;</div>
+            </div>
+            <div class="ticket-numero-card">
+                <div>
+                    <span>Numero de ticket</span>
+                    <strong>{{ ticket.number }}</strong>
+                </div>
+                <span class="copiar-boton">{{ ticket.status }}</span>
+            </div>
+            <div class="resumen-confirmacion">
+                <article>
+                    <span>Categoria</span>
+                    <strong>{{ ticket.category }}</strong>
+                </article>
+                <article>
+                    <span>Prioridad</span>
+                    <strong class="prioridad-badge {{ ticket.priority_class }}">{{ ticket.priority }}</strong>
+                </article>
+                <article>
+                    <span>Estado</span>
+                    <strong class="{{ ticket.status_class }}">{{ ticket.status }}</strong>
+                </article>
+            </div>
+            <div class="ticket-form-acciones">
+                <a class="boton-secundario" href="{% url 'home' %}"><span class="boton-flecha invertida">&larr;</span> Volver al inicio</a>
+                <a class="boton-principal" href="{% url 'ticket_status' ticket.number %}">Ver estado <span class="boton-flecha">&rarr;</span></a>
+            </div>
+        </section>
+    </section>
+</main>
+{% endblock %}

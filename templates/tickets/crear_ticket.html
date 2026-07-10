@@ -1,0 +1,90 @@
+{% extends "tickets/base.html" %}
+{% block title %}Crear ticket - GestionTicket UAPA{% endblock %}
+{% block page %}crear-ticket{% endblock %}
+{% block content %}
+<main class="pagina-ticket">
+    <section class="ticket-shell">
+        <aside class="ticket-aside">
+            <a class="logo-principal logo-claro" href="{% url 'home' %}">
+                <span class="logo-icono">&#127915;</span>
+                <span class="logo-resaltado">Soporte</span>
+                <span class="logo-separador">|</span>
+                <span class="logo-normal">Tickets</span>
+            </a>
+            <div class="aside-titulo">
+                <p class="etiqueta etiqueta-clara">Mesa de ayuda UAPA</p>
+                <h2>Cree un ticket en pasos sencillos</h2>
+                <p class="aside-texto">Registre su solicitud y obtenga un numero de seguimiento para revisar el estado en cualquier momento.</p>
+            </div>
+            <ol class="pasos-lista">
+                <li class="paso-item activo">
+                    <span class="paso-numero">1</span>
+                    <div>
+                        <strong>Sus datos</strong>
+                        <small>Nombre y correo de contacto</small>
+                    </div>
+                </li>
+                <li class="paso-item">
+                    <span class="paso-numero">2</span>
+                    <div>
+                        <strong>Detalle del caso</strong>
+                        <small>Categoria, prioridad y descripcion</small>
+                    </div>
+                </li>
+                <li class="paso-item">
+                    <span class="paso-numero">3</span>
+                    <div>
+                        <strong>Confirmacion</strong>
+                        <small>Numero de ticket para seguimiento</small>
+                    </div>
+                </li>
+            </ol>
+            <div class="aside-pie">
+                <span class="punto-vivo"></span>
+                <p>Soporte activo - Lunes a viernes</p>
+            </div>
+        </aside>
+
+        <form class="ticket-form" method="post">
+            {% csrf_token %}
+            <div class="ticket-form-cabecera">
+                <div>
+                    <p class="etiqueta">Paso 1 de 3</p>
+                    <h1>Empecemos con sus datos</h1>
+                    <p class="sub-texto">Estos datos seran usados para notificar el avance de su solicitud.</p>
+                </div>
+                <div class="badge-paso">01</div>
+            </div>
+            <div class="progreso"><span class="progreso-barra" style="width: 33%"></span></div>
+            {% if form.errors %}
+                <div class="mensaje-form mensaje-error">Revise los campos antes de continuar.</div>
+            {% endif %}
+            <div class="campo">
+                <label for="id_full_name">Nombre completo</label>
+                <div class="input-icon">
+                    <span class="input-emoji">&#128100;</span>
+                    {{ form.full_name }}
+                </div>
+            </div>
+            <div class="campo">
+                <label for="id_email">Correo electronico</label>
+                <div class="input-icon">
+                    <span class="input-emoji">&#9993;</span>
+                    {{ form.email }}
+                </div>
+            </div>
+            <div class="campo">
+                <label for="id_enrollment">Matricula <small class="opcional">(opcional)</small></label>
+                <div class="input-icon">
+                    <span class="input-emoji">&#127891;</span>
+                    {{ form.enrollment }}
+                </div>
+            </div>
+            <div class="ticket-form-acciones">
+                <a class="boton-secundario" href="{% url 'home' %}">Cancelar</a>
+                <button type="submit" class="boton-principal">Continuar <span class="boton-flecha">&rarr;</span></button>
+            </div>
+        </form>
+    </section>
+</main>
+{% endblock %}

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estado del ticket - GestionTicket UAPA</title>
+    <link rel="icon" href="data:,">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="estado-ticket">
+    <main class="pagina-ticket">
+        <section class="ticket-shell">
+            <aside class="ticket-aside">
+                <a class="logo-principal logo-claro" href="index.html">
+                    <span class="logo-icono">&#127915;</span>
+                    <span class="logo-resaltado">Soporte</span>
+                    <span class="logo-separador">|</span>
+                    <span class="logo-normal">Tickets</span>
+                </a>
+
+                <div class="aside-titulo">
+                    <p class="etiqueta etiqueta-clara">Consulta de estado</p>
+                    <h2>Asi va su solicitud</h2>
+                    <p class="aside-texto">Revise el avance de su ticket y los eventos registrados por el equipo de soporte.</p>
+                </div>
+
+                <ol class="pasos-lista">
+                    <li class="paso-item completado">
+                        <span class="paso-numero">&#10003;</span>
+                        <div>
+                            <strong>Recibido</strong>
+                            <small>Solicitud registrada</small>
+                        </div>
+                    </li>
+                    <li class="paso-item activo">
+                        <span class="paso-numero">&#9881;</span>
+                        <div>
+                            <strong>En analisis</strong>
+                            <small>Equipo revisando el caso</small>
+                        </div>
+                    </li>
+                    <li class="paso-item">
+                        <span class="paso-numero">&#127919;</span>
+                        <div>
+                            <strong>Resolucion</strong>
+                            <small>Pendiente</small>
+                        </div>
+                    </li>
+                    <li class="paso-item">
+                        <span class="paso-numero">&#10003;</span>
+                        <div>
+                            <strong>Cerrado</strong>
+                            <small>Pendiente</small>
+                        </div>
+                    </li>
+                </ol>
+
+                <div class="aside-pie">
+                    <span class="punto-vivo"></span>
+                    <p>En atencion ahora</p>
+                </div>
+            </aside>
+
+            <section class="ticket-form">
+                <div class="ticket-form-cabecera">
+                    <div>
+                        <p class="etiqueta">Resultado de la consulta</p>
+                        <h1>Estado de su ticket</h1>
+                        <p class="sub-texto">Guarde el numero para futuras consultas o suscribase a notificaciones.</p>
+                    </div>
+                    <div class="badge-paso">&#128270;</div>
+                </div>
+
+                <div class="ticket-numero-card">
+                    <div>
+                        <span>Numero de ticket</span>
+                        <strong>GT-2026-001</strong>
+                    </div>
+                    <span class="copiar-boton">&#128203; Copiar</span>
+                </div>
+
+                <div class="resumen-confirmacion">
+                    <article>
+                        <span>Categoria</span>
+                        <strong>Soporte tecnico</strong>
+                    </article>
+                    <article>
+                        <span>Prioridad</span>
+                        <strong class="prioridad-media">Alta</strong>
+                    </article>
+                    <article>
+                        <span>Estado</span>
+                        <strong class="estado-abierto">En proceso</strong>
+                    </article>
+                </div>
+
+                <div class="campo">
+                    <label>Progreso de atencion</label>
+                    <div class="progreso">
+                        <span class="progreso-barra" style="width: 55%"></span>
+                    </div>
+                    <div class="progreso-pasos">
+                        <span class="paso-completado">Recibido</span>
+                        <span class="paso-actual">En analisis</span>
+                        <span>Resolucion</span>
+                        <span>Cerrado</span>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="label-seccion">Historial</label>
+                    <ul class="timeline">
+                        <li>
+                            <span class="timeline-punto">&#9881;</span>
+                            <div class="timeline-cuerpo">
+                                <strong>En analisis por el equipo de soporte</strong>
+                                <small>hace 1 hora</small>
+                                <p>Su caso fue asignado al area tecnica para revision.</p>
+                            </div>
+                        </li>
+                        <li class="completado">
+                            <span class="timeline-punto">&#10003;</span>
+                            <div class="timeline-cuerpo">
+                                <strong>Ticket aceptado</strong>
+                                <small>hace 3 horas</small>
+                                <p>La solicitud fue validada y entro en cola de atencion.</p>
+                            </div>
+                        </li>
+                        <li class="completado">
+                            <span class="timeline-punto">&#128229;</span>
+                            <div class="timeline-cuerpo">
+                                <strong>Ticket recibido</strong>
+                                <small>hace 4 horas</small>
+                                <p>Numero de seguimiento emitido al usuario.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="ticket-form-acciones">
+                    <a class="boton-secundario" href="index.html">
+                        <span class="boton-flecha invertida">&larr;</span>
+                        Volver al inicio
+                    </a>
+                    <a class="boton-principal" href="crear-ticket.html">
+                        Crear otro ticket
+                        <span class="boton-flecha">&rarr;</span>
+                    </a>
+                </div>
+
+                <p class="nota-seguridad">
+                    <span>&#128276;</span>
+                    Recibira un correo cuando el estado de su ticket cambie.
+                </p>
+            </section>
+        </section>
+    </main>
+    <script src="js/app.js"></script>
+</body>
+</html>

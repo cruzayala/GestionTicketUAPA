@@ -1,0 +1,90 @@
+{% extends "tickets/base.html" %}
+{% block title %}Iniciar sesion - GestionTicket UAPA{% endblock %}
+{% block page %}login{% endblock %}
+{% block content %}
+<main class="pagina-ticket">
+    <section class="ticket-shell">
+        <aside class="ticket-aside">
+            <a class="logo-principal logo-claro" href="{% url 'home' %}">
+                <span class="logo-icono">&#127915;</span>
+                <span class="logo-resaltado">Soporte</span>
+                <span class="logo-separador">|</span>
+                <span class="logo-normal">Tickets</span>
+            </a>
+            <div class="aside-titulo">
+                <p class="etiqueta etiqueta-clara">Acceso al panel</p>
+                <h2>Bienvenido de vuelta al panel de soporte</h2>
+                <p class="aside-texto">Gestione todos los tickets recibidos y de respuesta a las solicitudes de la comunidad UAPA.</p>
+            </div>
+            <ol class="pasos-lista">
+                <li class="paso-item activo">
+                    <span class="paso-numero">&#128274;</span>
+                    <div>
+                        <strong>Acceso seguro</strong>
+                        <small>Autenticacion del personal de soporte</small>
+                    </div>
+                </li>
+                <li class="paso-item">
+                    <span class="paso-numero">&#128202;</span>
+                    <div>
+                        <strong>Panel de control</strong>
+                        <small>Estadisticas en tiempo real</small>
+                    </div>
+                </li>
+                <li class="paso-item">
+                    <span class="paso-numero">&#127919;</span>
+                    <div>
+                        <strong>Resolucion rapida</strong>
+                        <small>Atienda tickets de forma agil</small>
+                    </div>
+                </li>
+            </ol>
+            <div class="aside-pie">
+                <span class="punto-vivo"></span>
+                <p>Servicio en linea</p>
+            </div>
+        </aside>
+
+        <form class="ticket-form" method="post">
+            {% csrf_token %}
+            <div class="ticket-form-cabecera">
+                <div>
+                    <p class="etiqueta">Iniciar sesion</p>
+                    <h1>Acceda con su cuenta</h1>
+                    <p class="sub-texto">Ingrese sus credenciales para gestionar los tickets del sistema.</p>
+                </div>
+                <div class="badge-paso">&#128100;</div>
+            </div>
+            {% if error %}
+                <div class="mensaje-form mensaje-error">{{ error }}</div>
+            {% endif %}
+            <div class="campo">
+                <label for="id_username">Usuario</label>
+                <div class="input-icon">
+                    <span class="input-emoji">&#128100;</span>
+                    {{ form.username }}
+                </div>
+            </div>
+            <div class="campo">
+                <label for="id_password">Contrasena</label>
+                <div class="input-icon">
+                    <span class="input-emoji">&#128274;</span>
+                    {{ form.password }}
+                </div>
+            </div>
+            <div class="ticket-form-acciones">
+                <a class="boton-secundario" href="{% url 'home' %}">Volver</a>
+                <button type="submit" class="boton-principal">Ingresar <span class="boton-flecha">&rarr;</span></button>
+            </div>
+            <p class="nota-seguridad">
+                <span>&#128274;</span>
+                Acceso validado contra usuarios registrados en la base de datos.
+            </p>
+            <p class="login-sin-cuenta">
+                No tiene cuenta?
+                <a href="{% url 'ticket_contact' %}">Cree un ticket sin registrarse</a>
+            </p>
+        </form>
+    </section>
+</main>
+{% endblock %}

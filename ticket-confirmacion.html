@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket creado - GestionTicket UAPA</title>
+    <link rel="icon" href="data:,">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="ticket-confirmacion">
+    <main class="pagina-ticket">
+        <section class="ticket-shell">
+            <aside class="ticket-aside">
+                <a class="logo-principal logo-claro" href="index.html">
+                    <span class="logo-icono">&#127915;</span>
+                    <span class="logo-resaltado">Soporte</span>
+                    <span class="logo-separador">|</span>
+                    <span class="logo-normal">Tickets</span>
+                </a>
+
+                <div class="aside-titulo">
+                    <p class="etiqueta etiqueta-clara">Solicitud registrada</p>
+                    <h2>Su ticket fue creado correctamente</h2>
+                    <p class="aside-texto">Le notificaremos por correo cada vez que haya una actualizacion.</p>
+                </div>
+
+                <ol class="pasos-lista">
+                    <li class="paso-item completado">
+                        <span class="paso-numero">&#10003;</span>
+                        <div>
+                            <strong>Sus datos</strong>
+                            <small>Listo</small>
+                        </div>
+                    </li>
+                    <li class="paso-item completado">
+                        <span class="paso-numero">&#10003;</span>
+                        <div>
+                            <strong>Detalle del caso</strong>
+                            <small>Listo</small>
+                        </div>
+                    </li>
+                    <li class="paso-item activo">
+                        <span class="paso-numero">3</span>
+                        <div>
+                            <strong>Confirmacion</strong>
+                            <small>Ticket emitido</small>
+                        </div>
+                    </li>
+                </ol>
+
+                <div class="aside-pie">
+                    <span class="punto-vivo"></span>
+                    <p>En cola de atencion</p>
+                </div>
+            </aside>
+
+            <section class="ticket-form confirmacion-card">
+                <div class="check-circulo">
+                    <span>&#10003;</span>
+                </div>
+
+                <div class="confirmacion-texto">
+                    <p class="etiqueta">Paso 3 de 3</p>
+                    <h1>Ticket creado con exito</h1>
+                    <p class="sub-texto">Guarde este numero para dar seguimiento al estado de su solicitud.</p>
+                </div>
+
+                <div class="ticket-numero-card">
+                    <div>
+                        <span>Numero de ticket</span>
+                        <strong>GT-2026-001</strong>
+                    </div>
+                    <span class="copiar-boton">&#128203; Copiar</span>
+                </div>
+
+                <div class="resumen-confirmacion">
+                    <article>
+                        <span>Categoria</span>
+                        <strong>Soporte tecnico</strong>
+                    </article>
+                    <article>
+                        <span>Prioridad</span>
+                        <strong class="prioridad-media">Media</strong>
+                    </article>
+                    <article>
+                        <span>Estado</span>
+                        <strong class="estado-abierto">Abierto</strong>
+                    </article>
+                </div>
+
+                <div class="confirmacion-acciones">
+                    <a class="boton-secundario" href="estado-ticket.html">Ver estado</a>
+                    <a class="boton-principal" href="index.html">
+                        Finalizar
+                        <span class="boton-flecha">&rarr;</span>
+                    </a>
+                </div>
+
+                <p class="nota-seguridad">
+                    <span>&#128231;</span>
+                    Hemos enviado una copia del ticket a su correo electronico.
+                </p>
+            </section>
+        </section>
+    </main>
+    <script src="js/app.js"></script>
+</body>
+</html>

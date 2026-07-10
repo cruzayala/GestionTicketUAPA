@@ -1,0 +1,97 @@
+{% extends "tickets/base.html" %}
+{% block title %}Detalle del ticket - GestionTicket UAPA{% endblock %}
+{% block page %}ticket-detalle{% endblock %}
+{% block content %}
+<main class="pagina-ticket">
+    <section class="ticket-shell">
+        <aside class="ticket-aside">
+            <a class="logo-principal logo-claro" href="{% url 'home' %}">
+                <span class="logo-icono">&#127915;</span>
+                <span class="logo-resaltado">Soporte</span>
+                <span class="logo-separador">|</span>
+                <span class="logo-normal">Tickets</span>
+            </a>
+            <div class="aside-titulo">
+                <p class="etiqueta etiqueta-clara">Mesa de ayuda UAPA</p>
+                <h2>Describa el caso para asignarlo al area correcta</h2>
+                <p class="aside-texto">Mientras mas claro sea el detalle, mas rapido podremos atender su solicitud.</p>
+            </div>
+            <ol class="pasos-lista">
+                <li class="paso-item completado">
+                    <span class="paso-numero">&#10003;</span>
+                    <div>
+                        <strong>Sus datos</strong>
+                        <small>Listo</small>
+                    </div>
+                </li>
+                <li class="paso-item activo">
+                    <span class="paso-numero">2</span>
+                    <div>
+                        <strong>Detalle del caso</strong>
+                        <small>Categoria, prioridad y descripcion</small>
+                    </div>
+                </li>
+                <li class="paso-item">
+                    <span class="paso-numero">3</span>
+                    <div>
+                        <strong>Confirmacion</strong>
+                        <small>Numero de ticket para seguimiento</small>
+                    </div>
+                </li>
+            </ol>
+            <div class="aside-pie">
+                <span class="punto-vivo"></span>
+                <p>Tiempo medio de respuesta: 2 horas</p>
+            </div>
+        </aside>
+
+        <form class="ticket-form" method="post">
+            {% csrf_token %}
+            <div class="ticket-form-cabecera">
+                <div>
+                    <p class="etiqueta">Paso 2 de 3</p>
+                    <h1>Cuentenos del caso</h1>
+                    <p class="sub-texto">Elija la categoria correcta para enrutar el ticket al equipo adecuado.</p>
+                </div>
+                <div class="badge-paso">02</div>
+            </div>
+            <div class="progreso"><span class="progreso-barra" style="width: 66%"></span></div>
+            {% if form.errors %}
+                <div class="mensaje-form mensaje-error">Complete el detalle del caso.</div>
+            {% endif %}
+            <div class="grid-dos">
+                <div class="campo">
+                    <label for="id_category">Tipo de solicitud</label>
+                    <div class="input-icon">
+                        <span class="input-emoji">&#128221;</span>
+                        {{ form.category }}
+                    </div>
+                </div>
+                <div class="campo">
+                    <label for="id_priority">Prioridad</label>
+                    <div class="input-icon">
+                        <span class="input-emoji">&#9888;</span>
+                        {{ form.priority }}
+                    </div>
+                </div>
+            </div>
+            <div class="campo">
+                <label for="id_subject">Asunto</label>
+                <div class="input-icon">
+                    <span class="input-emoji">&#9998;</span>
+                    {{ form.subject }}
+                </div>
+            </div>
+            <div class="campo">
+                <label for="id_description">Descripcion</label>
+                {{ form.description }}
+                <small class="ayuda-campo">Incluya pasos para reproducir el caso si aplica.</small>
+            </div>
+            <div class="ticket-form-acciones">
+                <a class="boton-secundario" href="{% url 'ticket_contact' %}"><span class="boton-flecha invertida">&larr;</span> Volver</a>
+                <button type="submit" class="boton-principal">Crear ticket <span class="boton-flecha">&rarr;</span></button>
+            </div>
+        </form>
+    </section>
+</main>
+{% endblock %}

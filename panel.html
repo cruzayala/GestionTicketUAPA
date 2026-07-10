@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel - GestionTicket UAPA</title>
+    <link rel="icon" href="data:,">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="panel">
+    <div class="layout">
+        <aside class="sidebar">
+            <header class="marca">
+                <a class="logo-principal logo-sidebar logo-claro" href="panel.html">
+                    <span class="logo-icono">&#127915;</span>
+                    <span class="logo-resaltado">Soporte</span>
+                    <span class="logo-separador">|</span>
+                    <span class="logo-normal">Tickets</span>
+                </a>
+            </header>
+
+            <nav class="menu-lateral">
+                <a href="panel.html" class="activo">
+                    <span class="menu-icono">&#127968;</span>
+                    Dashboard
+                </a>
+                <a href="tickets.html">
+                    <span class="menu-icono">&#128221;</span>
+                    Tickets
+                </a>
+                <a href="crear-ticket.html">
+                    <span class="menu-icono">&#10133;</span>
+                    Crear ticket
+                </a>
+                <a href="configuracion.html">
+                    <span class="menu-icono">&#9881;</span>
+                    Configuracion
+                </a>
+                <a href="index.html">
+                    <span class="menu-icono">&#128682;</span>
+                    Cerrar sesion
+                </a>
+            </nav>
+
+            <div class="sidebar-usuario">
+                <span class="sidebar-avatar">AS</span>
+                <div>
+                    <strong>Equipo soporte</strong>
+                    <small>soporte@uapa.edu</small>
+                </div>
+            </div>
+        </aside>
+
+        <div class="contenido">
+            <header class="encabezado">
+                <div>
+                    <p class="etiqueta">Panel principal</p>
+                    <h1>Hola, equipo de soporte</h1>
+                    <p class="sub-titulo">Resumen general de los tickets de la mesa de ayuda.</p>
+                </div>
+                <div class="acciones">
+                    <div class="bienvenida">
+                        <span class="sidebar-avatar">AS</span>
+                        <div>
+                            <strong>Admin</strong>
+                            <small>En linea</small>
+                        </div>
+                    </div>
+                    <a class="boton-principal" href="crear-ticket.html">
+                        Crear ticket
+                        <span class="boton-flecha">&rarr;</span>
+                    </a>
+                </div>
+            </header>
+
+            <main>
+                <section class="stats" aria-label="Resumen de tickets">
+                    <article class="stat-card naranja">
+                        <div class="stat-card-top">
+                            <span class="stat-icono">&#128221;</span>
+                            <span class="stat-delta">+12%</span>
+                        </div>
+                        <span class="stat-label">Tickets abiertos</span>
+                        <strong class="stat-numero">12</strong>
+                        <div class="stat-mini"><span style="width: 70%"></span></div>
+                    </article>
+                    <article class="stat-card azul">
+                        <div class="stat-card-top">
+                            <span class="stat-icono">&#9203;</span>
+                            <span class="stat-delta">+4%</span>
+                        </div>
+                        <span class="stat-label">En proceso</span>
+                        <strong class="stat-numero">7</strong>
+                        <div class="stat-mini"><span style="width: 45%"></span></div>
+                    </article>
+                    <article class="stat-card verde">
+                        <div class="stat-card-top">
+                            <span class="stat-icono">&#10003;</span>
+                            <span class="stat-delta">+18%</span>
+                        </div>
+                        <span class="stat-label">Cerrados</span>
+                        <strong class="stat-numero">24</strong>
+                        <div class="stat-mini"><span style="width: 85%"></span></div>
+                    </article>
+                    <article class="stat-card morado">
+                        <div class="stat-card-top">
+                            <span class="stat-icono">&#9201;</span>
+                            <span class="stat-delta baja">-6%</span>
+                        </div>
+                        <span class="stat-label">Tiempo medio</span>
+                        <strong class="stat-numero">2.4h</strong>
+                        <div class="stat-mini"><span style="width: 60%"></span></div>
+                    </article>
+                </section>
+
+                <section class="panel-doble">
+                    <article class="panel">
+                        <div class="panel-titulo">
+                            <h2>Tickets prioritarios</h2>
+                            <a href="tickets.html">Ver todos</a>
+                        </div>
+                        <ul class="tickets-tabla">
+                            <li>
+                                <span class="tabla-id">GT-2026-001</span>
+                                <div class="tabla-asunto">
+                                    <strong>Problema con acceso</strong>
+                                    <small>Soporte tecnico · hace 2h</small>
+                                </div>
+                                <span class="cat-badge">&#128187; Tecnico</span>
+                                <span class="prioridad-badge prioridad-alta">Alta</span>
+                                <a class="boton-ver" href="estado-ticket.html">Ver</a>
+                            </li>
+                            <li>
+                                <span class="tabla-id">GT-2026-002</span>
+                                <div class="tabla-asunto">
+                                    <strong>Solicitud de equipo</strong>
+                                    <small>Administrativa · hace 5h</small>
+                                </div>
+                                <span class="cat-badge">&#128209; Admin</span>
+                                <span class="prioridad-badge prioridad-media">Media</span>
+                                <a class="boton-ver" href="estado-ticket.html">Ver</a>
+                            </li>
+                            <li>
+                                <span class="tabla-id">GT-2026-003</span>
+                                <div class="tabla-asunto">
+                                    <strong>Consulta de plataforma</strong>
+                                    <small>Plataforma virtual · ayer</small>
+                                </div>
+                                <span class="cat-badge">&#127760; Virtual</span>
+                                <span class="prioridad-badge prioridad-baja">Baja</span>
+                                <a class="boton-ver" href="estado-ticket.html">Ver</a>
+                            </li>
+                        </ul>
+                    </article>
+
+                    <article class="panel">
+                        <div class="panel-titulo">
+                            <h2>Actividad reciente</h2>
+                            <span class="punto-vivo"></span>
+                        </div>
+                        <ul class="timeline">
+                            <li class="completado">
+                                <span class="timeline-punto">&#10003;</span>
+                                <div class="timeline-cuerpo">
+                                    <strong>Ticket GT-2026-024 cerrado</strong>
+                                    <small>hace 15 minutos</small>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="timeline-punto">&#9998;</span>
+                                <div class="timeline-cuerpo">
+                                    <strong>Nuevo comentario en GT-2026-001</strong>
+                                    <small>hace 1 hora</small>
+                                </div>
+                            </li>
+                            <li>
+                                <span class="timeline-punto">&#128229;</span>
+                                <div class="timeline-cuerpo">
+                                    <strong>Ticket GT-2026-005 recibido</strong>
+                                    <small>hace 3 horas</small>
+                                </div>
+                            </li>
+                        </ul>
+                    </article>
+                </section>
+            </main>
+
+            <footer>
+                <p>GestionTicket UAPA</p>
+                <span>Proyecto Integrador ISW-306</span>
+            </footer>
+        </div>
+    </div>
+    <script src="js/app.js"></script>
+</body>
+</html>

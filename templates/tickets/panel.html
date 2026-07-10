@@ -19,7 +19,9 @@
                         <small>En linea</small>
                     </div>
                 </div>
-                <a class="boton-principal" href="{% url 'ticket_create_admin' %}">Crear ticket <span class="boton-flecha">&rarr;</span></a>
+                {% if request.user.is_staff or perms.tickets.add_ticket %}
+                    <a class="boton-principal" href="{% url 'ticket_create_admin' %}">Crear ticket <span class="boton-flecha">&rarr;</span></a>
+                {% endif %}
             </div>
         </header>
 
@@ -79,7 +81,7 @@
                                 </div>
                                 <span class="cat-badge">&#128221; {{ ticket.category_badge }}</span>
                                 <span class="prioridad-badge {{ ticket.priority_class }}">{{ ticket.priority }}</span>
-                                <a class="boton-ver" href="{% url 'ticket_manage' ticket.number %}">Ver</a>
+                                {% if request.user.is_staff or perms.tickets.change_ticket %}<a class="boton-ver" href="{% url 'ticket_manage' ticket.number %}">Ver</a>{% else %}<span class="access-badge">Solo lectura</span>{% endif %}
                             </li>
                         {% empty %}
                             <li>

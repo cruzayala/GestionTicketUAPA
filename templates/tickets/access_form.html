@@ -1,0 +1,52 @@
+{% extends "tickets/base.html" %}
+{% block title %}{{ title }} - GestionTicket UAPA{% endblock %}
+{% block page %}configuracion{% endblock %}
+{% block content %}
+<div class="layout">
+    {% include "tickets/sidebar.html" with active="settings" %}
+    <div class="contenido">
+        <header class="encabezado">
+            <div>
+                <p class="etiqueta">{{ section }}</p>
+                <h1>{{ title }}</h1>
+                <p class="sub-titulo">{{ subtitle }}</p>
+            </div>
+            <a class="boton-secundario" href="{% url cancel_url %}">Cancelar</a>
+        </header>
+
+        <main class="access-form-wrap">
+            <form method="post" class="panel access-form">
+                {% csrf_token %}
+                {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
+                <div class="access-form-grid">
+                    {% for field in form %}
+                        {% if field.name == "groups" or field.name == "permissions" %}
+                            <div class="campo access-form-wide">
+                                <label>{{ field.label }}</label>
+                                <div class="access-checklist">{{ field }}</div>
+                                {% for error in field.errors %}<small class="text-danger">{{ error }}</small>{% endfor %}
+                            </div>
+                        {% elif field.field.widget.input_type == "checkbox" %}
+                            <div class="access-toggle-field">
+                                {{ field }}
+                                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                {% for error in field.errors %}<small class="text-danger">{{ error }}</small>{% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="campo">
+                                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                {{ field }}
+                                {% for error in field.errors %}<small class="text-danger">{{ error }}</small>{% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="access-form-actions">
+                    <a class="boton-secundario" href="{% url cancel_url %}">Cancelar</a>
+                    <button type="submit" class="boton-principal">Guardar <span class="boton-flecha">&rarr;</span></button>
+                </div>
+            </form>
+        </main>
+    </div>
+</div>
+{% endblock %}

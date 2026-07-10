@@ -1,0 +1,79 @@
+{% extends "tickets/base.html" %}
+{% block title %}Usuarios - GestionTicket UAPA{% endblock %}
+{% block page %}configuracion{% endblock %}
+{% block content %}
+<div class="layout">
+    {% include "tickets/sidebar.html" with active="settings" %}
+    <div class="contenido">
+        <header class="encabezado">
+            <div>
+                <p class="etiqueta">Configuracion de acceso</p>
+                <h1>Usuarios</h1>
+                <p class="sub-titulo">Administre las cuentas que pueden trabajar en el sistema.</p>
+            </div>
+            <a class="boton-principal" href="{% url 'access_user_create' %}">Nuevo usuario <span class="boton-flecha">&rarr;</span></a>
+        </header>
+
+        <nav class="access-tabs" aria-label="Administracion de acceso">
+            <a href="{% url 'settings' %}">Resumen</a>
+            <a href="{% url 'access_users' %}" class="activo">Usuarios</a>
+            <a href="{% url 'access_roles' %}">Roles</a>
+            <a href="{% url 'access_permissions' %}">Permisos</a>
+        </nav>
+
+        <main class="panel bootstrap-panel access-table-panel">
+            <div class="panel-titulo">
+                <h2>Cuentas registradas</h2>
+                <span>{{ users|length }} usuarios</span>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0 access-table">
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Correo</th>
+                            <th>Roles</th>
+                            <th>Acceso</th>
+                            <th>Estado</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td>
+                                <div class="access-user-cell">
+                                    <span>{{ user.username|slice:":2"|upper }}</span>
+                                    <div><strong>{{ user.get_full_name|default:user.username }}</strong><small>@{{ user.username }}</small></div>
+                                </div>
+                            </td>
+                            <td>{{ user.email|default:"Sin correo" }}</td>
+                            <td>
+                                <div class="access-tags">
+                                    {% for role in user.groups.all %}<span>{{ role.name }}</span>{% empty %}<small>Sin rol</small>{% endfor %}
+                                </div>
+                            </td>
+                            <td>{% if user.is_staff %}<span class="access-badge access-badge-admin">Administrativo</span>{% else %}<span class="access-badge">Usuario</span>{% endif %}</td>
+                            <td>{% if user.is_active %}<span class="access-state active">Activo</span>{% else %}<span class="access-state">Inactivo</span>{% endif %}</td>
+                            <td>
+                                <div class="access-actions">
+                                    <a class="btn btn-sm btn-outline-primary" href="{% url 'access_user_update' user.id %}">Editar</a>
+                                    {% if user != request.user %}
+                                        <form method="post" action="{% url 'access_user_delete' user.id %}" onsubmit="return confirm('Eliminar este usuario?')">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
+                                        </form>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr><td colspan="6"><div class="tabla-vacia"><strong>No hay usuarios registrados</strong></div></td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}

@@ -21,10 +21,12 @@
             <span class="menu-icono">&#128230;</span>
             Bandeja
         </a>
-        <a href="{% url 'settings' %}" class="{% if active == 'settings' %}activo{% endif %}">
-            <span class="menu-icono">&#9881;</span>
-            Configuracion
-        </a>
+        {% if request.user.is_staff %}
+            <a href="{% url 'settings' %}" class="{% if active == 'settings' %}activo{% endif %}">
+                <span class="menu-icono">&#9881;</span>
+                Configuracion
+            </a>
+        {% endif %}
         <a href="{% url 'reports' %}" class="{% if active == 'reports' %}activo{% endif %}">
             <span class="menu-icono">&#128202;</span>
             Reportes

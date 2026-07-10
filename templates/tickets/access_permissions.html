@@ -1,0 +1,57 @@
+{% extends "tickets/base.html" %}
+{% block title %}Permisos - GestionTicket UAPA{% endblock %}
+{% block page %}configuracion{% endblock %}
+{% block content %}
+<div class="layout">
+    {% include "tickets/sidebar.html" with active="settings" %}
+    <div class="contenido">
+        <header class="encabezado">
+            <div>
+                <p class="etiqueta">Configuracion de acceso</p>
+                <h1>Permisos</h1>
+                <p class="sub-titulo">Cree permisos personalizados para asignarlos a los roles.</p>
+            </div>
+            <a class="boton-principal" href="{% url 'access_permission_create' %}">Nuevo permiso <span class="boton-flecha">&rarr;</span></a>
+        </header>
+
+        <nav class="access-tabs" aria-label="Administracion de acceso">
+            <a href="{% url 'settings' %}">Resumen</a>
+            <a href="{% url 'access_users' %}">Usuarios</a>
+            <a href="{% url 'access_roles' %}">Roles</a>
+            <a href="{% url 'access_permissions' %}" class="activo">Permisos</a>
+        </nav>
+
+        <main class="panel bootstrap-panel access-table-panel">
+            <div class="panel-titulo">
+                <h2>Permisos personalizados</h2>
+                <span>{{ permissions|length }} permisos</span>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0 access-table">
+                    <thead><tr><th>Permiso</th><th>Codigo</th><th>Roles asociados</th><th></th></tr></thead>
+                    <tbody>
+                    {% for permission in permissions %}
+                        <tr>
+                            <td><div class="access-name-cell"><span>&#128273;</span><strong>{{ permission.name }}</strong></div></td>
+                            <td><code>{{ permission.codename }}</code></td>
+                            <td>{{ permission.group_set.count }}</td>
+                            <td>
+                                <div class="access-actions">
+                                    <a class="btn btn-sm btn-outline-primary" href="{% url 'access_permission_update' permission.id %}">Editar</a>
+                                    <form method="post" action="{% url 'access_permission_delete' permission.id %}" onsubmit="return confirm('Eliminar este permiso?')">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr><td colspan="4"><div class="tabla-vacia"><strong>No hay permisos personalizados</strong><small>Los permisos internos de Django se mantienen protegidos.</small></div></td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}

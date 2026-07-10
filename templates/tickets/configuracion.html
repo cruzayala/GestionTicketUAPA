@@ -7,50 +7,72 @@
     <div class="contenido">
         <header class="encabezado">
             <div>
-                <p class="etiqueta">Ajustes del sistema</p>
+                <p class="etiqueta">Administracion del sistema</p>
                 <h1>Configuracion</h1>
-                <p class="sub-titulo">Opciones preparadas para futuras mejoras del sistema.</p>
+                <p class="sub-titulo">Controle las cuentas, roles y permisos del equipo de soporte.</p>
             </div>
         </header>
 
-        <main>
-            <section class="config-grupo">
-                <header class="config-grupo-cabecera">
-                    <span class="config-grupo-icono">&#128100;</span>
-                    <div>
-                        <h2>Perfil</h2>
-                        <p>Informacion visible para el equipo de soporte.</p>
-                    </div>
-                </header>
-                <div class="grid-dos">
-                    <div class="campo">
-                        <label>Nombre completo</label>
-                        <div class="input-icon">
-                            <span class="input-emoji">&#128100;</span>
-                            <input type="text" value="Equipo de soporte UAPA">
-                        </div>
-                    </div>
-                    <div class="campo">
-                        <label>Correo</label>
-                        <div class="input-icon">
-                            <span class="input-emoji">&#9993;</span>
-                            <input type="email" value="soporte@uapa.edu">
-                        </div>
-                    </div>
+        <main class="access-dashboard">
+            <section class="access-summary" aria-label="Resumen de acceso">
+                <div>
+                    <span>Usuarios</span>
+                    <strong>{{ user_count }}</strong>
+                    <small>Cuentas registradas</small>
+                </div>
+                <div>
+                    <span>Roles</span>
+                    <strong>{{ role_count }}</strong>
+                    <small>Perfiles de acceso</small>
+                </div>
+                <div>
+                    <span>Permisos</span>
+                    <strong>{{ permission_count }}</strong>
+                    <small>Permisos personalizados</small>
                 </div>
             </section>
 
-            <section class="config-grupo">
-                <header class="config-grupo-cabecera">
-                    <span class="config-grupo-icono">&#128274;</span>
-                    <div>
-                        <h2>Seguridad</h2>
-                        <p>La sesion del panel se maneja desde Django.</p>
-                    </div>
-                </header>
+            <section class="access-modules">
+                <a href="{% url 'access_users' %}" class="access-module-row">
+                    <span class="access-module-icon">&#128101;</span>
+                    <span class="access-module-copy">
+                        <strong>Usuarios</strong>
+                        <small>Cree cuentas, asigne roles y controle su estado.</small>
+                    </span>
+                    <span class="access-module-count">{{ user_count }}</span>
+                    <span class="access-module-arrow">&rarr;</span>
+                </a>
+                <a href="{% url 'access_roles' %}" class="access-module-row">
+                    <span class="access-module-icon">&#128188;</span>
+                    <span class="access-module-copy">
+                        <strong>Roles</strong>
+                        <small>Agrupe permisos para cada tipo de integrante.</small>
+                    </span>
+                    <span class="access-module-count">{{ role_count }}</span>
+                    <span class="access-module-arrow">&rarr;</span>
+                </a>
+                <a href="{% url 'access_permissions' %}" class="access-module-row">
+                    <span class="access-module-icon">&#128273;</span>
+                    <span class="access-module-copy">
+                        <strong>Permisos</strong>
+                        <small>Defina accesos personalizados para los roles.</small>
+                    </span>
+                    <span class="access-module-count">{{ permission_count }}</span>
+                    <span class="access-module-arrow">&rarr;</span>
+                </a>
+            </section>
+
+            <section class="access-session">
+                <div>
+                    <span class="access-session-avatar">{{ request.user.username|slice:":2"|upper }}</span>
+                    <span>
+                        <strong>{{ request.user.get_full_name|default:request.user.username }}</strong>
+                        <small>{{ request.user.email|default:"Cuenta administrativa" }}</small>
+                    </span>
+                </div>
                 <form method="post" action="{% url 'logout' %}">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-outline-danger enlace-naranja">Cerrar sesion &rarr;</button>
+                    <button type="submit" class="btn btn-outline-danger logout-compact">Cerrar sesion</button>
                 </form>
             </section>
         </main>

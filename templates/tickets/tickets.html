@@ -21,7 +21,9 @@
                     <p class="sub-titulo">Filtre, busque y revise el estado de todos los tickets.</p>
                 {% endif %}
             </div>
-            <a class="boton-principal" href="{% url 'ticket_create_admin' %}">Crear ticket <span class="boton-flecha">&rarr;</span></a>
+            {% if request.user.is_staff or perms.tickets.add_ticket %}
+                <a class="boton-principal" href="{% url 'ticket_create_admin' %}">Crear ticket <span class="boton-flecha">&rarr;</span></a>
+            {% endif %}
         </header>
 
         <nav class="ticket-views" aria-label="Vistas de tickets">
@@ -111,7 +113,7 @@
                         <td><span class="cat-badge">&#128221; {{ ticket.category_badge }}</span></td>
                         <td><span class="prioridad-badge {{ ticket.priority_class }}">{{ ticket.priority }}</span></td>
                         <td><strong class="inbox-wait">{{ ticket.elapsed_label }}</strong></td>
-                        <td><a class="btn btn-sm btn-primary boton-atender" href="{% url 'ticket_manage' ticket.number %}">Gestionar</a></td>
+                        <td>{% if request.user.is_staff or perms.tickets.change_ticket %}<a class="btn btn-sm btn-primary boton-atender" href="{% url 'ticket_manage' ticket.number %}">Gestionar</a>{% else %}<span class="access-badge">Solo lectura</span>{% endif %}</td>
                     </tr>
                 {% empty %}
                     <tr>
@@ -152,7 +154,7 @@
                         <td>{{ ticket.phase_label }}</td>
                         <td><span class="estado-badge {{ ticket.status_class }}">{{ ticket.status }}</span></td>
                         <td>{{ ticket.elapsed_label }}</td>
-                        <td><a class="btn btn-sm btn-outline-primary boton-ver" href="{% url 'ticket_manage' ticket.number %}">Ver</a></td>
+                        <td>{% if request.user.is_staff or perms.tickets.change_ticket %}<a class="btn btn-sm btn-outline-primary boton-ver" href="{% url 'ticket_manage' ticket.number %}">Ver</a>{% else %}<span class="access-badge">Solo lectura</span>{% endif %}</td>
                     </tr>
                 {% empty %}
                     <tr>

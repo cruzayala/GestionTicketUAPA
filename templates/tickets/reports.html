@@ -11,7 +11,9 @@
                 <h1>Reportes</h1>
                 <p class="sub-titulo">Resumen del trabajo actual de la mesa de ayuda.</p>
             </div>
-            <a class="boton-principal" href="{% url 'ticket_create_admin' %}">Crear ticket <span class="boton-flecha">&rarr;</span></a>
+            {% if request.user.is_staff or perms.tickets.add_ticket %}
+                <a class="boton-principal" href="{% url 'ticket_create_admin' %}">Crear ticket <span class="boton-flecha">&rarr;</span></a>
+            {% endif %}
         </header>
 
         <main>

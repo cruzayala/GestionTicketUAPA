@@ -1,0 +1,57 @@
+{% extends "tickets/base.html" %}
+{% block title %}Roles - GestionTicket UAPA{% endblock %}
+{% block page %}configuracion{% endblock %}
+{% block content %}
+<div class="layout">
+    {% include "tickets/sidebar.html" with active="settings" %}
+    <div class="contenido">
+        <header class="encabezado">
+            <div>
+                <p class="etiqueta">Configuracion de acceso</p>
+                <h1>Roles</h1>
+                <p class="sub-titulo">Organice los permisos que puede recibir cada usuario.</p>
+            </div>
+            <a class="boton-principal" href="{% url 'access_role_create' %}">Nuevo rol <span class="boton-flecha">&rarr;</span></a>
+        </header>
+
+        <nav class="access-tabs" aria-label="Administracion de acceso">
+            <a href="{% url 'settings' %}">Resumen</a>
+            <a href="{% url 'access_users' %}">Usuarios</a>
+            <a href="{% url 'access_roles' %}" class="activo">Roles</a>
+            <a href="{% url 'access_permissions' %}">Permisos</a>
+        </nav>
+
+        <main class="panel bootstrap-panel access-table-panel">
+            <div class="panel-titulo">
+                <h2>Roles registrados</h2>
+                <span>{{ roles|length }} roles</span>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0 access-table">
+                    <thead><tr><th>Rol</th><th>Usuarios</th><th>Permisos</th><th></th></tr></thead>
+                    <tbody>
+                    {% for role in roles %}
+                        <tr>
+                            <td><div class="access-name-cell"><span>&#128188;</span><strong>{{ role.name }}</strong></div></td>
+                            <td>{{ role.user_set.count }}</td>
+                            <td>{{ role.permissions.count }}</td>
+                            <td>
+                                <div class="access-actions">
+                                    <a class="btn btn-sm btn-outline-primary" href="{% url 'access_role_update' role.id %}">Editar</a>
+                                    <form method="post" action="{% url 'access_role_delete' role.id %}" onsubmit="return confirm('Eliminar este rol?')">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr><td colspan="4"><div class="tabla-vacia"><strong>No hay roles registrados</strong><small>Cree un rol para organizar los permisos.</small></div></td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}

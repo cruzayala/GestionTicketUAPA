@@ -1,18 +1,36 @@
 from datetime import timedelta
 
 from django.db.models import Q
-from django.contrib.auth import authenticate, get_user_model, login as auth_login, logout as auth_logout
+from django.contrib.auth import authenticate, get_user_model, login as auth_login, logout as auth_logout, update_session_auth_hash
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.models import Group, Permission
+from django.contrib.contenttypes.models import ContentType
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 from django.utils import timezone
 
-from .forms import AdminTicketCreateForm, ContactForm, LoginForm, SearchTicketForm, TicketCommentForm, TicketDetailForm, TicketUpdateForm
+from .forms import AdminTicketCreateForm, ContactForm, CustomPermissionForm, LoginForm, RoleForm, SearchTicketForm, TicketCommentForm, TicketDetailForm, TicketUpdateForm, UserCreateForm, UserUpdateForm
 from .models import Ticket, TicketEvent
 
 
 def support_required(user):
+    return user.is_authenticated and (user.is_staff or user.has_perm("tickets.view_ticket"))
+
+
+def ticket_add_required(user):
+    return user.is_authenticated and (user.is_staff or user.has_perm("tickets.add_ticket"))
+
+
+def ticket_change_required(user):
+    return user.is_authenticated and (user.is_staff or user.has_perm("tickets.change_ticket"))
+
+
+def ticket_delete_required(user):
+    return user.is_authenticated and (user.is_staff or user.has_perm("tickets.delete_ticket"))
+
+
+def access_required(user):
     return user.is_authenticated and user.is_staff
 
 
@@ -36,7 +54,7 @@ def login_view(request):
         username = form.cleaned_data["username"].strip()
         password = form.cleaned_data["password"].strip()
         user = authenticate(request, username=username, password=password)
-        if user and user.is_staff:
+        if user and support_required(user):
             auth_login(request, user)
             return redirect("panel")
         error = "Usuario o contrasena incorrectos, o la cuenta no tiene acceso administrativo."
@@ -146,7 +164,7 @@ def reports(request):
     return render(request, "tickets/reports.html", context)
 
 
-@user_passes_test(support_required, login_url="login")
+@user_passes_test(ticket_add_required, login_url="login")
 def ticket_create_admin(request):
     form = AdminTicketCreateForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
@@ -236,7 +254,7 @@ def ticket_status(request, number):
     return render(request, "tickets/estado_ticket.html", {"ticket": ticket, "form": form, "error": error})
 
 
-@user_passes_test(support_required, login_url="login")
+@user_passes_test(ticket_change_required, login_url="login")
 def ticket_manage(request, number):
     ticket = get_object_or_404(Ticket, number=number.upper())
     staff_users = get_user_model().objects.filter(is_staff=True, is_active=True).order_by("username")
@@ -307,7 +325,7 @@ def ticket_manage(request, number):
     return render(request, "tickets/ticket_manage.html", {"ticket": ticket, "form": form})
 
 
-@user_passes_test(support_required, login_url="login")
+@user_passes_test(ticket_delete_required, login_url="login")
 @require_POST
 def ticket_delete(request, number):
     ticket = get_object_or_404(Ticket, number=number.upper())
@@ -316,6 +334,173 @@ def ticket_delete(request, number):
     return redirect("ticket_list")
 
 
-@user_passes_test(support_required, login_url="login")
+@user_passes_test(access_required, login_url="login")
 def settings_view(request):
-    return render(request, "tickets/configuracion.html")
+    ticket_content_type = ContentType.objects.get_for_model(Ticket)
+    custom_permissions = Permission.objects.filter(content_type=ticket_content_type).exclude(codename__in=["add_ticket", "change_ticket", "delete_ticket", "view_ticket"])
+    context = {
+        "user_count": get_user_model().objects.count(),
+        "role_count": Group.objects.count(),
+        "permission_count": custom_permissions.count(),
+    }
+    return render(request, "tickets/configuracion.html", context)
+
+
+@user_passes_test(access_required, login_url="login")
+def access_users(request):
+    users = get_user_model().objects.prefetch_related("groups").order_by("username")
+    return render(request, "tickets/access_users.html", {"users": users})
+
+
+@user_passes_test(access_required, login_url="login")
+def access_user_create(request):
+    form = UserCreateForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "El usuario fue creado correctamente.")
+        return redirect("access_users")
+    return render(request, "tickets/access_form.html", {
+        "form": form,
+        "title": "Nuevo usuario",
+        "subtitle": "Registre una cuenta y asigne sus roles de acceso.",
+        "section": "Usuarios",
+        "cancel_url": "access_users",
+    })
+
+
+@user_passes_test(access_required, login_url="login")
+def access_user_update(request, user_id):
+    user = get_object_or_404(get_user_model(), pk=user_id)
+    form = UserUpdateForm(request.POST or None, instance=user)
+    if request.method == "POST" and form.is_valid():
+        if user == request.user and not form.cleaned_data["is_active"]:
+            form.add_error("is_active", "No puede desactivar su propia cuenta.")
+        elif user == request.user and not form.cleaned_data["is_staff"]:
+            form.add_error("is_staff", "No puede retirar su propio acceso administrativo.")
+        else:
+            updated_user = form.save()
+            if user == request.user and form.cleaned_data.get("password1"):
+                update_session_auth_hash(request, updated_user)
+            messages.success(request, "El usuario fue actualizado correctamente.")
+            return redirect("access_users")
+    return render(request, "tickets/access_form.html", {
+        "form": form,
+        "title": "Editar usuario",
+        "subtitle": "Actualice los datos, roles y estado de la cuenta.",
+        "section": "Usuarios",
+        "cancel_url": "access_users",
+    })
+
+
+@user_passes_test(access_required, login_url="login")
+@require_POST
+def access_user_delete(request, user_id):
+    user = get_object_or_404(get_user_model(), pk=user_id)
+    if user == request.user:
+        messages.error(request, "No puede eliminar su propia cuenta.")
+    else:
+        user.delete()
+        messages.success(request, "El usuario fue eliminado correctamente.")
+    return redirect("access_users")
+
+
+@user_passes_test(access_required, login_url="login")
+def access_roles(request):
+    roles = Group.objects.prefetch_related("permissions", "user_set").order_by("name")
+    return render(request, "tickets/access_roles.html", {"roles": roles})
+
+
+@user_passes_test(access_required, login_url="login")
+def access_role_create(request):
+    form = RoleForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "El rol fue creado correctamente.")
+        return redirect("access_roles")
+    return render(request, "tickets/access_form.html", {
+        "form": form,
+        "title": "Nuevo rol",
+        "subtitle": "Defina el nombre y los permisos disponibles para el rol.",
+        "section": "Roles",
+        "cancel_url": "access_roles",
+    })
+
+
+@user_passes_test(access_required, login_url="login")
+def access_role_update(request, role_id):
+    role = get_object_or_404(Group, pk=role_id)
+    form = RoleForm(request.POST or None, instance=role)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "El rol fue actualizado correctamente.")
+        return redirect("access_roles")
+    return render(request, "tickets/access_form.html", {
+        "form": form,
+        "title": "Editar rol",
+        "subtitle": "Modifique el nombre o los permisos asignados.",
+        "section": "Roles",
+        "cancel_url": "access_roles",
+    })
+
+
+@user_passes_test(access_required, login_url="login")
+@require_POST
+def access_role_delete(request, role_id):
+    role = get_object_or_404(Group, pk=role_id)
+    role.delete()
+    messages.success(request, "El rol fue eliminado correctamente.")
+    return redirect("access_roles")
+
+
+def custom_permission_queryset():
+    content_type = ContentType.objects.get_for_model(Ticket)
+    return Permission.objects.filter(content_type=content_type).exclude(codename__in=["add_ticket", "change_ticket", "delete_ticket", "view_ticket"])
+
+
+@user_passes_test(access_required, login_url="login")
+def access_permissions(request):
+    permissions = custom_permission_queryset().order_by("name")
+    return render(request, "tickets/access_permissions.html", {"permissions": permissions})
+
+
+@user_passes_test(access_required, login_url="login")
+def access_permission_create(request):
+    content_type = ContentType.objects.get_for_model(Ticket)
+    form = CustomPermissionForm(request.POST or None, content_type=content_type)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "El permiso fue creado correctamente.")
+        return redirect("access_permissions")
+    return render(request, "tickets/access_form.html", {
+        "form": form,
+        "title": "Nuevo permiso",
+        "subtitle": "Cree un permiso que pueda asignarse a los roles del sistema.",
+        "section": "Permisos",
+        "cancel_url": "access_permissions",
+    })
+
+
+@user_passes_test(access_required, login_url="login")
+def access_permission_update(request, permission_id):
+    permission = get_object_or_404(custom_permission_queryset(), pk=permission_id)
+    form = CustomPermissionForm(request.POST or None, instance=permission, content_type=permission.content_type)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "El permiso fue actualizado correctamente.")
+        return redirect("access_permissions")
+    return render(request, "tickets/access_form.html", {
+        "form": form,
+        "title": "Editar permiso",
+        "subtitle": "Actualice el nombre o codigo del permiso.",
+        "section": "Permisos",
+        "cancel_url": "access_permissions",
+    })
+
+
+@user_passes_test(access_required, login_url="login")
+@require_POST
+def access_permission_delete(request, permission_id):
+    permission = get_object_or_404(custom_permission_queryset(), pk=permission_id)
+    permission.delete()
+    messages.success(request, "El permiso fue eliminado correctamente.")
+    return redirect("access_permissions")

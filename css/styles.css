@@ -1594,8 +1594,8 @@ footer p {
 .ticket-workspace {
     align-items: start;
     display: grid;
-    gap: 38px;
-    grid-template-columns: minmax(0, 1fr) 330px;
+    gap: 34px;
+    grid-template-columns: minmax(0, 1fr);
 }
 
 .ticket-main-column {
@@ -1710,28 +1710,71 @@ footer p {
     padding-bottom: 0;
 }
 
-.ticket-control-rail {
-    border-left: 1px solid var(--borde);
-    padding-left: 26px;
+.ticket-management {
+    border-top: 1px solid var(--borde);
+    padding-top: 26px;
 }
 
-.ticket-control-form {
+.ticket-management .ticket-section-heading {
+    align-items: flex-start;
+}
+
+.ticket-management .ticket-section-heading p {
+    color: var(--gris);
+    margin: 5px 0 0;
+}
+
+.ticket-management-form {
     display: grid;
-    gap: 15px;
+    gap: 20px;
 }
 
-.ticket-control-form .campo {
+.ticket-management-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.ticket-management-grid .campo {
     margin: 0;
 }
 
-.ticket-control-form textarea {
-    min-height: 112px;
+.ticket-management-half {
+    grid-column: span 2;
+}
+
+.ticket-management-full {
+    grid-column: 1 / -1;
+}
+
+.ticket-management-grid textarea {
+    min-height: 118px;
+}
+
+.ticket-management-actions {
+    align-items: center;
+    border-top: 1px solid var(--borde);
+    display: flex;
+    gap: 16px;
+    justify-content: space-between;
+    margin-top: 22px;
+    padding-top: 18px;
+}
+
+.ticket-management-actions .boton-principal {
+    flex: 0 0 auto;
+    min-width: 190px;
+    justify-content: flex-end;
 }
 
 .ticket-delete-action {
-    border-top: 1px solid var(--borde);
-    margin-top: 22px;
-    padding-top: 16px;
+    margin: 0;
+}
+
+.ticket-delete-action .btn-link {
+    font-size: 0.88rem;
+    font-weight: 700;
+    width: auto;
 }
 
 .admin-create-layout {
@@ -2507,10 +2550,8 @@ footer p {
     .ticket-workspace {
         grid-template-columns: 1fr;
     }
-    .ticket-control-rail {
-        border-left: 0;
-        border-top: 1px solid var(--borde);
-        padding: 24px 0 0;
+    .ticket-management-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
     .hero-features {
         grid-template-columns: 1fr;
@@ -2561,12 +2602,46 @@ footer p {
     }
 
     .sidebar {
+        gap: 14px;
         position: static;
         height: auto;
     }
 
+    .sidebar .marca {
+        padding-bottom: 10px;
+    }
+
     .menu-lateral {
-        grid-template-columns: repeat(4, 1fr);
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+        overflow-x: auto;
+        padding-bottom: 4px;
+        scrollbar-width: thin;
+    }
+
+    .menu-lateral a,
+    .menu-lateral .sidebar-logout {
+        flex: 0 0 auto;
+    }
+
+    .menu-lateral a {
+        padding: 10px 12px;
+        white-space: nowrap;
+    }
+
+    .menu-lateral a::before {
+        display: none;
+    }
+
+    .menu-lateral .sidebar-logout button {
+        padding: 10px 12px;
+        white-space: nowrap;
+        width: auto;
+    }
+
+    .sidebar-usuario {
+        display: none;
     }
 
     .encabezado,
@@ -2664,8 +2739,27 @@ footer p {
         grid-template-columns: 1fr 1fr;
     }
 
-    .menu-lateral {
-        grid-template-columns: 1fr 1fr;
+    .ticket-management-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ticket-management-half,
+    .ticket-management-full {
+        grid-column: auto;
+    }
+
+    .ticket-management-actions .boton-principal {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .ticket-management-actions {
+        align-items: stretch;
+        flex-direction: column-reverse;
+    }
+
+    .ticket-delete-action {
+        text-align: center;
     }
 
     .encabezado h1 {

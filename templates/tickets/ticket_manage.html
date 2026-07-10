@@ -74,51 +74,58 @@
                 </section>
             </section>
 
-            <aside class="ticket-control-rail">
-                <form method="post" class="ticket-control-form">
-                    {% csrf_token %}
-                    <div class="ticket-section-heading">
-                        <h2>Gestionar</h2>
-                        <span>{{ ticket.assignee_name }}</span>
+            <section class="ticket-management">
+                <div class="ticket-section-heading">
+                    <div>
+                        <h2>Gestionar ticket</h2>
+                        <p>Responsable actual: <strong>{{ ticket.assignee_name }}</strong></p>
                     </div>
+                    <span>{{ ticket.phase_label }}</span>
+                </div>
+                <form method="post" class="ticket-management-form" id="ticket-management-form">
+                    {% csrf_token %}
                     {% if form.errors %}
                         <div class="alert alert-danger" role="alert">Revise los datos antes de guardar el ticket.</div>
                     {% endif %}
-                    <div class="campo">
-                        <label for="id_assigned_to">Responsable</label>
-                        {{ form.assigned_to }}
+                    <div class="ticket-management-grid">
+                        <div class="campo">
+                            <label for="id_assigned_to">Responsable</label>
+                            {{ form.assigned_to }}
+                        </div>
+                        <div class="campo">
+                            <label for="id_status">Estado</label>
+                            {{ form.status }}
+                        </div>
+                        <div class="campo">
+                            <label for="id_priority">Prioridad</label>
+                            {{ form.priority }}
+                        </div>
+                        <div class="campo">
+                            <label for="id_category">Categoria</label>
+                            {{ form.category }}
+                        </div>
+                        <div class="campo ticket-management-half">
+                            <label for="id_subject">Asunto</label>
+                            {{ form.subject }}
+                        </div>
+                        <div class="campo ticket-management-half">
+                            <label for="id_description">Descripcion</label>
+                            {{ form.description }}
+                        </div>
+                        <div class="campo ticket-management-full">
+                            <label for="id_note">Respuesta para el solicitante</label>
+                            {{ form.note }}
+                        </div>
                     </div>
-                    <div class="campo">
-                        <label for="id_status">Estado</label>
-                        {{ form.status }}
-                    </div>
-                    <div class="campo">
-                        <label for="id_priority">Prioridad</label>
-                        {{ form.priority }}
-                    </div>
-                    <div class="campo">
-                        <label for="id_category">Categoria</label>
-                        {{ form.category }}
-                    </div>
-                    <div class="campo">
-                        <label for="id_subject">Asunto</label>
-                        {{ form.subject }}
-                    </div>
-                    <div class="campo">
-                        <label for="id_description">Descripcion</label>
-                        {{ form.description }}
-                    </div>
-                    <div class="campo">
-                        <label for="id_note">Respuesta</label>
-                        {{ form.note }}
-                    </div>
-                    <button type="submit" class="boton-principal">Guardar <span class="boton-flecha">&rarr;</span></button>
                 </form>
-                <form method="post" action="{% url 'ticket_delete' ticket.number %}" class="ticket-delete-action">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-link text-danger p-0">Eliminar ticket</button>
-                </form>
-            </aside>
+                <div class="ticket-management-actions">
+                    <form method="post" action="{% url 'ticket_delete' ticket.number %}" class="ticket-delete-action">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-link text-danger p-0">Eliminar ticket</button>
+                    </form>
+                    <button type="submit" form="ticket-management-form" class="boton-principal">Guardar cambios <span class="boton-flecha">&rarr;</span></button>
+                </div>
+            </section>
         </main>
     </div>
 </div>

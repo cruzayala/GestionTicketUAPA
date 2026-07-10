@@ -58,3 +58,19 @@ python manage.py check
 python manage.py migrate
 python manage.py runserver
 ```
+
+## Estructura del proyecto
+
+La organización del proyecto sigue la estructura estándar de Django, facilitando la separación de responsabilidades entre la lógica de negocio, la presentación y la persistencia de datos.
+
+```text
+GestionTicket/
+├── database/          # Scripts de creación y exportación de la base de datos
+├── static/            # Archivos estáticos (CSS, JavaScript e imágenes)
+├── templates/         # Plantillas HTML del sistema
+├── tickets/           # Aplicación principal para la gestión de tickets
+├── manage.py          # Punto de entrada para la administración del proyecto
+└── requirements.txt   # Dependencias necesarias para ejecutar la aplicación
+```
+
+Se recomienda mantener esta estructura para facilitar el mantenimiento, la escalabilidad y la incorporación de nuevas funcionalidades al sistema.

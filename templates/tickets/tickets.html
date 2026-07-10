@@ -3,13 +3,23 @@
 {% block page %}tickets{% endblock %}
 {% block content %}
 <div class="layout">
-    {% include "tickets/sidebar.html" with active="tickets" %}
+    {% if view == "unassigned" %}
+        {% include "tickets/sidebar.html" with active="inbox" %}
+    {% else %}
+        {% include "tickets/sidebar.html" with active="tickets" %}
+    {% endif %}
     <div class="contenido">
         <header class="encabezado">
             <div>
-                <p class="etiqueta">Gestion de solicitudes</p>
-                <h1>Tickets registrados</h1>
-                <p class="sub-titulo">Filtre, busque y revise el estado de todos los tickets.</p>
+                {% if view == "unassigned" %}
+                    <p class="etiqueta">Bandeja operativa</p>
+                    <h1>Solicitudes sin asignar</h1>
+                    <p class="sub-titulo">Revise la prioridad y asigne cada solicitud al equipo de soporte.</p>
+                {% else %}
+                    <p class="etiqueta">Gestion de solicitudes</p>
+                    <h1>Tickets registrados</h1>
+                    <p class="sub-titulo">Filtre, busque y revise el estado de todos los tickets.</p>
+                {% endif %}
             </div>
             <a class="boton-principal" href="{% url 'ticket_create_admin' %}">Crear ticket <span class="boton-flecha">&rarr;</span></a>
         </header>
@@ -21,7 +31,33 @@
             <a href="{% url 'ticket_list' %}?view=closed" class="{% if view == 'closed' %}activo{% endif %}">Cerrados</a>
         </nav>
 
+        {% if inbox_metrics %}
+            <section class="inbox-kpis" aria-label="Resumen de la bandeja">
+                <div class="inbox-kpi">
+                    <span>Pendientes</span>
+                    <strong>{{ inbox_metrics.pending }}</strong>
+                    <small>Sin responsable</small>
+                </div>
+                <div class="inbox-kpi inbox-kpi-danger">
+                    <span>Prioridad alta</span>
+                    <strong>{{ inbox_metrics.high_priority }}</strong>
+                    <small>Requieren atencion</small>
+                </div>
+                <div class="inbox-kpi inbox-kpi-warning">
+                    <span>Mas de 24 horas</span>
+                    <strong>{{ inbox_metrics.older_than_day }}</strong>
+                    <small>Pendientes antiguos</small>
+                </div>
+                <div class="inbox-kpi inbox-kpi-success">
+                    <span>Espera promedio</span>
+                    <strong>{{ inbox_metrics.average_wait }}</strong>
+                    <small>Tiempo en bandeja</small>
+                </div>
+            </section>
+        {% endif %}
+
         <form class="busqueda-bar" method="get">
+            {% if view != "todos" %}<input type="hidden" name="view" value="{{ view }}">{% endif %}
             <div class="input-icon">
                 <span class="input-emoji">&#128269;</span>
                 <input type="text" name="q" value="{{ query }}" placeholder="Buscar por numero, asunto o solicitante">
@@ -47,6 +83,47 @@
                 <span>{{ total }} resultados</span>
             </div>
             <div class="table-responsive">
+            {% if view == "unassigned" %}
+            <table class="table table-hover align-middle mb-0 tickets-tabla inbox-table">
+                <thead>
+                    <tr>
+                        <th>Numero</th>
+                        <th>Solicitud</th>
+                        <th>Solicitante</th>
+                        <th>Categoria</th>
+                        <th>Prioridad</th>
+                        <th>En espera</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for ticket in tickets %}
+                    <tr>
+                        <td><span class="tabla-id">{{ ticket.number }}</span></td>
+                        <td><div class="tabla-asunto">
+                            <strong>{{ ticket.subject }}</strong>
+                            <small>Recibido {{ ticket.created_at|date:"d/m/Y H:i" }}</small>
+                        </div></td>
+                        <td><div class="tabla-asunto solicitante-cell">
+                            <strong>{{ ticket.full_name }}</strong>
+                            <small>{{ ticket.email }}</small>
+                        </div></td>
+                        <td><span class="cat-badge">&#128221; {{ ticket.category_badge }}</span></td>
+                        <td><span class="prioridad-badge {{ ticket.priority_class }}">{{ ticket.priority }}</span></td>
+                        <td><strong class="inbox-wait">{{ ticket.elapsed_label }}</strong></td>
+                        <td><a class="btn btn-sm btn-primary boton-atender" href="{% url 'ticket_manage' ticket.number %}">Gestionar</a></td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="7"><div class="tabla-vacia">
+                            <strong>La bandeja esta al dia</strong>
+                            <small>No hay tickets pendientes de asignacion.</small>
+                        </div></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
             <table class="table table-hover align-middle mb-0 tickets-tabla">
                 <thead>
                     <tr>
@@ -87,6 +164,7 @@
                 {% endfor %}
                 </tbody>
             </table>
+            {% endif %}
             </div>
         </section>
 

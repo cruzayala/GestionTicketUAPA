@@ -1748,7 +1748,13 @@ footer p {
 }
 
 .ticket-management-grid textarea {
-    min-height: 118px;
+    min-height: 148px;
+    resize: vertical;
+}
+
+.ticket-management-grid input,
+.ticket-management-grid select {
+    min-height: 46px;
 }
 
 .ticket-management-actions {
@@ -1775,6 +1781,92 @@ footer p {
     font-size: 0.88rem;
     font-weight: 700;
     width: auto;
+}
+
+.inbox-kpis {
+    background: var(--blanco);
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.inbox-kpi {
+    border-left: 3px solid var(--azul);
+    display: grid;
+    gap: 3px;
+    min-width: 0;
+    padding: 18px 20px;
+}
+
+.inbox-kpi + .inbox-kpi {
+    border-top: 0;
+}
+
+.inbox-kpi span,
+.inbox-kpi small {
+    color: var(--gris);
+}
+
+.inbox-kpi span {
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.inbox-kpi strong {
+    color: var(--azul);
+    font-size: 1.5rem;
+    line-height: 1.2;
+}
+
+.inbox-kpi small {
+    font-size: 0.78rem;
+}
+
+.inbox-kpi-danger {
+    border-left-color: #dc3545;
+}
+
+.inbox-kpi-warning {
+    border-left-color: var(--naranja);
+}
+
+.inbox-kpi-success {
+    border-left-color: #198754;
+}
+
+.inbox-wait {
+    color: var(--azul);
+    white-space: nowrap;
+}
+
+.boton-atender {
+    background: var(--azul);
+    border-color: var(--azul);
+    font-weight: 700;
+}
+
+.boton-atender:hover {
+    background: #172a59;
+    border-color: #172a59;
+}
+
+.solicitante-cell {
+    min-width: 160px;
+}
+
+.tabla-vacia {
+    display: grid;
+    gap: 4px;
+    padding: 28px 12px;
+    text-align: center;
+}
+
+.tabla-vacia small {
+    color: var(--gris);
 }
 
 .admin-create-layout {
@@ -2551,6 +2643,9 @@ footer p {
         grid-template-columns: 1fr;
     }
     .ticket-management-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .inbox-kpis {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
     .hero-features {

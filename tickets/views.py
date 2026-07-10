@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.db.models import Q
 from django.contrib.auth import authenticate, get_user_model, login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import user_passes_test
@@ -68,15 +70,30 @@ def panel(request):
 
 @user_passes_test(support_required, login_url="login")
 def ticket_list(request):
-    tickets = Ticket.objects.all()
+    all_tickets = Ticket.objects.all()
+    tickets = all_tickets
     query = request.GET.get("q", "").strip()
     status = request.GET.get("status", "Todos")
     priority = request.GET.get("priority", "Cualquier prioridad")
     view = request.GET.get("view", "todos")
     section_title = "Todos los tickets"
+    inbox_metrics = None
     if view == "unassigned":
-        tickets = tickets.filter(assigned_to__isnull=True).exclude(status="Cerrado")
+        inbox = all_tickets.filter(assigned_to__isnull=True).exclude(status="Cerrado")
+        tickets = inbox
         section_title = "Bandeja sin asignar"
+        now = timezone.now()
+        pending_tickets = list(inbox)
+        average_minutes = 0
+        if pending_tickets:
+            average_minutes = sum((now - ticket.created_at).total_seconds() / 60 for ticket in pending_tickets) / len(pending_tickets)
+        average_hours, average_remainder = divmod(int(average_minutes), 60)
+        inbox_metrics = {
+            "pending": len(pending_tickets),
+            "high_priority": inbox.filter(priority="Alta").count(),
+            "older_than_day": inbox.filter(created_at__lt=now - timedelta(hours=24)).count(),
+            "average_wait": f"{average_hours}h {average_remainder}m" if pending_tickets else "Sin datos",
+        }
     elif view == "active":
         tickets = tickets.exclude(status="Cerrado")
         section_title = "Tickets activos"
@@ -97,6 +114,7 @@ def ticket_list(request):
         "view": view,
         "section_title": section_title,
         "total": tickets.count(),
+        "inbox_metrics": inbox_metrics,
     }
     return render(request, "tickets/tickets.html", context)
 

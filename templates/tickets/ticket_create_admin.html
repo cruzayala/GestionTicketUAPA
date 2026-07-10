@@ -17,6 +17,16 @@
         <main class="admin-create-layout">
             <form method="post" class="panel admin-ticket-form">
                 {% csrf_token %}
+                <datalist id="client-name-options">
+                    {% for client in clients %}
+                        <option value="{{ client.full_name }}" label="{{ client.email }}"></option>
+                    {% endfor %}
+                </datalist>
+                <datalist id="client-email-options">
+                    {% for client in clients %}
+                        <option value="{{ client.email }}" label="{{ client.full_name }}"></option>
+                    {% endfor %}
+                </datalist>
                 {% if form.errors %}
                     <div class="alert alert-danger mb-0" role="alert">Revise los campos obligatorios antes de registrar el ticket.</div>
                 {% endif %}

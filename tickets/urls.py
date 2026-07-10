@@ -10,6 +10,7 @@ urlpatterns = [
     path("panel/", views.panel, name="panel"),
     path("tickets/", views.ticket_list, name="ticket_list"),
     path("tickets/nuevo/", views.ticket_create_admin, name="ticket_create_admin"),
+    path("reportes/", views.reports, name="reports"),
     path("tickets/<str:number>/eliminar/", views.ticket_delete, name="ticket_delete"),
     path("tickets/<str:number>/", views.ticket_manage, name="ticket_manage"),
     path("crear-ticket/", views.ticket_contact, name="ticket_contact"),

@@ -55,6 +55,22 @@
                         <span>Ultima actualizacion</span>
                         <strong>{{ ticket.updated_at|date:"d/m/Y H:i" }}</strong>
                     </article>
+                    <article>
+                        <span>Responsable</span>
+                        <strong>{{ ticket.assignee_name }}</strong>
+                    </article>
+                    <article>
+                        <span>Fase</span>
+                        <strong>{{ ticket.phase_label }}</strong>
+                    </article>
+                    <article>
+                        <span>Primera respuesta</span>
+                        <strong>{{ ticket.response_label }}</strong>
+                    </article>
+                    <article>
+                        <span>Tiempo total</span>
+                        <strong>{{ ticket.elapsed_label }}</strong>
+                    </article>
                 </div>
                 <div class="descripcion-ticket">
                     <label>Descripcion</label>
@@ -71,6 +87,13 @@
                 </div>
                 <form method="post" class="ticket-form">
                     {% csrf_token %}
+                    {% if form.errors %}
+                        <div class="alert alert-danger" role="alert">Revise los datos antes de guardar el ticket.</div>
+                    {% endif %}
+                    <div class="campo">
+                        <label for="id_assigned_to">Asignar a</label>
+                        {{ form.assigned_to }}
+                    </div>
                     <div class="grid-dos admin-edit-grid">
                         <div class="campo">
                             <label for="id_category">Categoria</label>

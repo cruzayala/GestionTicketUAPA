@@ -30,8 +30,8 @@
                         <span class="stat-icono">&#128221;</span>
                         <span class="stat-delta">Hoy</span>
                     </div>
-                    <span class="stat-label">Tickets abiertos</span>
-                    <strong class="stat-numero">{{ open_count }}</strong>
+                    <span class="stat-label">Sin asignar</span>
+                    <strong class="stat-numero">{{ unassigned_count }}</strong>
                     <div class="stat-mini"><span style="width: 70%"></span></div>
                 </article>
                 <article class="stat-card azul">
@@ -39,7 +39,7 @@
                         <span class="stat-icono">&#9203;</span>
                         <span class="stat-delta">Actual</span>
                     </div>
-                    <span class="stat-label">En proceso</span>
+                    <span class="stat-label">En seguimiento</span>
                     <strong class="stat-numero">{{ process_count }}</strong>
                     <div class="stat-mini"><span style="width: 45%"></span></div>
                 </article>
@@ -57,8 +57,8 @@
                         <span class="stat-icono">&#9201;</span>
                         <span class="stat-delta baja">Meta</span>
                     </div>
-                    <span class="stat-label">Tiempo medio</span>
-                    <strong class="stat-numero">2.4h</strong>
+                    <span class="stat-label">Resolucion media</span>
+                    <strong class="stat-numero">{{ average_resolution }}</strong>
                     <div class="stat-mini"><span style="width: 60%"></span></div>
                 </article>
             </section>

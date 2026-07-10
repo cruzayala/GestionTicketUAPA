@@ -1584,6 +1584,7 @@ footer p {
 .stat-card.morado .stat-mini span { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
 
 .panel-doble {
+    align-items: start;
     display: grid;
     grid-template-columns: 1.3fr 1fr;
     gap: 18px;
@@ -1864,6 +1865,34 @@ footer p {
 .busqueda-bar .input-icon {
     flex: 1;
     min-width: 240px;
+}
+
+.ticket-views {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.ticket-views a {
+    background: var(--blanco);
+    border: 1px solid var(--borde);
+    border-radius: 10px;
+    color: var(--gris);
+    font-size: 0.88rem;
+    font-weight: 700;
+    padding: 9px 13px;
+}
+
+.ticket-views a.activo,
+.ticket-views a:hover {
+    background: #fff2e8;
+    border-color: var(--naranja);
+    color: var(--naranja);
+}
+
+.report-table {
+    margin-top: 22px;
 }
 
 .busqueda-bar select {
@@ -2432,6 +2461,11 @@ footer p {
     .table-responsive {
         max-width: 100%;
         overflow-x: auto;
+    }
+
+    .ticket-views a {
+        flex: 1 1 calc(50% - 8px);
+        text-align: center;
     }
 
     .hero {

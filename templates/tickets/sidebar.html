@@ -17,6 +17,10 @@
             <span class="menu-icono">&#128221;</span>
             Tickets
         </a>
+        <a href="{% url 'ticket_list' %}?view=unassigned" class="{% if active == 'inbox' %}activo{% endif %}">
+            <span class="menu-icono">&#128230;</span>
+            Bandeja
+        </a>
         <a href="{% url 'ticket_create_admin' %}" class="{% if active == 'create' %}activo{% endif %}">
             <span class="menu-icono">&#10133;</span>
             Crear ticket
@@ -24,6 +28,10 @@
         <a href="{% url 'settings' %}" class="{% if active == 'settings' %}activo{% endif %}">
             <span class="menu-icono">&#9881;</span>
             Configuracion
+        </a>
+        <a href="{% url 'reports' %}" class="{% if active == 'reports' %}activo{% endif %}">
+            <span class="menu-icono">&#128202;</span>
+            Reportes
         </a>
         <form method="post" action="{% url 'logout' %}" class="sidebar-logout">
             {% csrf_token %}

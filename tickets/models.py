@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from django.utils import timezone
 
 
@@ -32,6 +33,10 @@ class Ticket(models.Model):
     subject = models.CharField(max_length=160)
     description = models.TextField()
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="Abierto")
+    assigned_to = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name="assigned_tickets")
+    assigned_at = models.DateTimeField(null=True, blank=True)
+    first_response_at = models.DateTimeField(null=True, blank=True)
+    closed_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -73,6 +78,44 @@ class Ticket(models.Model):
         if self.category == "Otro":
             return "Otro"
         return "Tecnico"
+
+    @property
+    def phase_label(self):
+        if self.status == "Cerrado":
+            return "Cerrado"
+        if not self.assigned_to:
+            return "Sin asignar"
+        if self.first_response_at:
+            return "Seguimiento"
+        return "Asignado"
+
+    @property
+    def assignee_name(self):
+        if not self.assigned_to:
+            return "Sin asignar"
+        return self.assigned_to.get_full_name() or self.assigned_to.username
+
+    @property
+    def elapsed_label(self):
+        end_time = self.closed_at or timezone.now()
+        total_minutes = max(int((end_time - self.created_at).total_seconds() // 60), 0)
+        days, remaining = divmod(total_minutes, 1440)
+        hours, minutes = divmod(remaining, 60)
+        if days:
+            return f"{days}d {hours}h"
+        if hours:
+            return f"{hours}h {minutes}m"
+        return f"{minutes}m"
+
+    @property
+    def response_label(self):
+        if not self.first_response_at:
+            return "Pendiente"
+        total_minutes = max(int((self.first_response_at - self.created_at).total_seconds() // 60), 0)
+        hours, minutes = divmod(total_minutes, 60)
+        if hours:
+            return f"{hours}h {minutes}m"
+        return f"{minutes}m"
 
 
 class TicketEvent(models.Model):

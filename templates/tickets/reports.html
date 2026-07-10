@@ -1,0 +1,73 @@
+{% extends "tickets/base.html" %}
+{% block title %}Reportes - GestionTicket UAPA{% endblock %}
+{% block page %}reports{% endblock %}
+{% block content %}
+<div class="layout">
+    {% include "tickets/sidebar.html" with active="reports" %}
+    <div class="contenido">
+        <header class="encabezado">
+            <div>
+                <p class="etiqueta">Control operativo</p>
+                <h1>Reportes</h1>
+                <p class="sub-titulo">Resumen del trabajo actual de la mesa de ayuda.</p>
+            </div>
+            <a class="boton-principal" href="{% url 'ticket_create_admin' %}">Crear ticket <span class="boton-flecha">&rarr;</span></a>
+        </header>
+
+        <main>
+            <section class="stats" aria-label="Resumen de reportes">
+                <article class="stat-card naranja">
+                    <span class="stat-label">Sin asignar</span>
+                    <strong class="stat-numero">{{ unassigned }}</strong>
+                </article>
+                <article class="stat-card azul">
+                    <span class="stat-label">Activos</span>
+                    <strong class="stat-numero">{{ active }}</strong>
+                </article>
+                <article class="stat-card verde">
+                    <span class="stat-label">Cerrados</span>
+                    <strong class="stat-numero">{{ closed }}</strong>
+                </article>
+                <article class="stat-card morado">
+                    <span class="stat-label">Resolucion media</span>
+                    <strong class="stat-numero">{{ average_resolution }}</strong>
+                </article>
+            </section>
+
+            <section class="panel report-table">
+                <div class="panel-titulo">
+                    <h2>Carga por responsable</h2>
+                    <span>{{ total }} tickets registrados</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Responsable</th>
+                                <th>En seguimiento</th>
+                                <th>Cerrados</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in staff_summary %}
+                                <tr>
+                                    <td>{{ user.name }}</td>
+                                    <td>{{ user.active }}</td>
+                                    <td>{{ user.closed }}</td>
+                                </tr>
+                            {% empty %}
+                                <tr><td colspan="3">No hay usuarios de soporte disponibles.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>GestionTicket UAPA</p>
+            <span>Proyecto Integrador ISW-306</span>
+        </footer>
+    </div>
+</div>
+{% endblock %}

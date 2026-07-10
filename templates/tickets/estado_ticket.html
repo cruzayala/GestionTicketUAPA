@@ -43,7 +43,7 @@
                 <div>
                     <p class="etiqueta">Resultado de la consulta</p>
                     <h1>Estado de su ticket</h1>
-                    <p class="sub-texto">Guarde el numero para futuras consultas.</p>
+                <p class="sub-texto">Guarde el numero para futuras consultas y responda al equipo sin crear una cuenta.</p>
                 </div>
                 <div class="badge-paso">&#128270;</div>
             </div>
@@ -69,13 +69,18 @@
                 </article>
             </div>
             <div>
-                <label class="label-seccion">Historial</label>
+                <label class="label-seccion">Seguimiento de la solicitud</label>
                 <ul class="timeline">
                     {% for event in ticket.events.all %}
                         <li class="completado">
                             <span class="timeline-punto">&#10003;</span>
                             <div class="timeline-cuerpo">
                                 <strong>{{ event.title }}</strong>
+                                {% if event.author_role == "Sistema" %}
+                                    <span class="autor-evento">Registro automatico</span>
+                                {% else %}
+                                    <span class="autor-evento">{{ event.author_role }}: {{ event.author_name }}</span>
+                                {% endif %}
                                 <small>{{ event.created_at|date:"d/m/Y H:i" }}</small>
                                 {% if event.note %}<p>{{ event.note }}</p>{% endif %}
                             </div>
@@ -85,12 +90,35 @@
                             <span class="timeline-punto">&#128229;</span>
                             <div class="timeline-cuerpo">
                                 <strong>Ticket recibido</strong>
+                                <span class="autor-evento">Sistema</span>
                                 <small>{{ ticket.created_at|date:"d/m/Y H:i" }}</small>
                             </div>
                         </li>
                     {% endfor %}
                 </ul>
             </div>
+            <section class="seguimiento-respuesta">
+                <div>
+                    <p class="etiqueta">Agregar informacion</p>
+                    <h2>Envie un mensaje al equipo de soporte</h2>
+                    <p>Use el mismo correo con el que creo el ticket. Su mensaje quedara visible para el equipo.</p>
+                </div>
+                <form method="post" class="ticket-comment-form">
+                    {% csrf_token %}
+                    {% if error %}
+                        <div class="alert alert-danger" role="alert">{{ error }}</div>
+                    {% endif %}
+                    <div class="campo">
+                        <label for="id_email">Correo de contacto</label>
+                        {{ form.email }}
+                    </div>
+                    <div class="campo">
+                        <label for="id_message">Mensaje</label>
+                        {{ form.message }}
+                    </div>
+                    <button type="submit" class="boton-principal">Agregar mensaje <span class="boton-flecha">&rarr;</span></button>
+                </form>
+            </section>
             <div class="ticket-form-acciones">
                 <a class="boton-secundario" href="{% url 'home' %}"><span class="boton-flecha invertida">&larr;</span> Volver al inicio</a>
                 <a class="boton-principal" href="{% url 'ticket_contact' %}">Crear otro ticket <span class="boton-flecha">&rarr;</span></a>

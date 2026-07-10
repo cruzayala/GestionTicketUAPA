@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
-from .forms import ContactForm, LoginForm, SearchTicketForm, TicketDetailForm, TicketUpdateForm
+from .forms import ContactForm, LoginForm, SearchTicketForm, TicketCommentForm, TicketDetailForm, TicketUpdateForm
 from .models import Ticket, TicketEvent
 
 
@@ -104,7 +104,13 @@ def ticket_detail_form(request):
             subject=form.cleaned_data["subject"],
             description=form.cleaned_data["description"],
         )
-        TicketEvent.objects.create(ticket=ticket, title="Ticket recibido", note="La solicitud fue registrada correctamente.")
+        TicketEvent.objects.create(
+            ticket=ticket,
+            title="Ticket recibido",
+            note="La solicitud fue registrada correctamente.",
+            author_name="Sistema",
+            author_role="Sistema",
+        )
         request.session["last_ticket"] = ticket.number
         request.session.pop("ticket_contact", None)
         return redirect("ticket_confirm")
@@ -121,7 +127,22 @@ def ticket_confirm(request):
 
 def ticket_status(request, number):
     ticket = get_object_or_404(Ticket, number=number.upper())
-    return render(request, "tickets/estado_ticket.html", {"ticket": ticket})
+    form = TicketCommentForm(request.POST or None)
+    error = ""
+    if request.method == "POST" and form.is_valid():
+        email = form.cleaned_data["email"].strip().lower()
+        if email == ticket.email.lower():
+            TicketEvent.objects.create(
+                ticket=ticket,
+                title="Mensaje del solicitante",
+                note=form.cleaned_data["message"].strip(),
+                author_name=ticket.full_name,
+                author_role="Solicitante",
+            )
+            messages.success(request, "Su mensaje fue agregado al seguimiento del ticket.")
+            return redirect("ticket_status", number=ticket.number)
+        error = "El correo no coincide con el usado al crear este ticket."
+    return render(request, "tickets/estado_ticket.html", {"ticket": ticket, "form": form, "error": error})
 
 
 @user_passes_test(support_required, login_url="login")
@@ -142,7 +163,13 @@ def ticket_manage(request, number):
         ticket.status = form.cleaned_data["status"]
         ticket.save()
         note = form.cleaned_data["note"].strip()
-        TicketEvent.objects.create(ticket=ticket, title="Ticket actualizado", note=note)
+        TicketEvent.objects.create(
+            ticket=ticket,
+            title="Respuesta del equipo de soporte" if note else "Ticket actualizado",
+            note=note,
+            author_name=request.user.get_full_name() or request.user.username,
+            author_role="Soporte",
+        )
         messages.success(request, "Los cambios del ticket fueron guardados correctamente.")
         return redirect("ticket_manage", number=ticket.number)
     return render(request, "tickets/ticket_manage.html", {"ticket": ticket, "form": form})

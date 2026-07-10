@@ -32,3 +32,8 @@ class TicketUpdateForm(forms.Form):
     description = forms.CharField(widget=forms.Textarea(attrs={"rows": 5, "class": "form-control"}))
     status = forms.ChoiceField(choices=STATUS_CHOICES, widget=forms.Select(attrs={"class": "form-select"}))
     note = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows": 4, "placeholder": "Nota del cambio de estado", "class": "form-control"}))
+
+
+class TicketCommentForm(forms.Form):
+    email = forms.EmailField(widget=forms.EmailInput(attrs={"placeholder": "El correo usado al crear el ticket", "class": "form-control"}))
+    message = forms.CharField(min_length=5, widget=forms.Textarea(attrs={"rows": 4, "placeholder": "Escriba informacion adicional o responda al equipo de soporte", "class": "form-control"}))

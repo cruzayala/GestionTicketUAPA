@@ -66,7 +66,7 @@
                 <div class="panel-titulo">
                     <div>
                         <h2>Seguimiento</h2>
-                        <p class="sub-titulo">Cambie el estado y registre una nota breve.</p>
+                        <p class="sub-titulo">Actualice el ticket y responda al solicitante desde el mismo panel.</p>
                     </div>
                 </div>
                 <form method="post" class="ticket-form">
@@ -97,8 +97,9 @@
                         </div>
                     </div>
                     <div class="campo">
-                        <label for="id_note">Nota</label>
+                        <label for="id_note">Respuesta para el solicitante</label>
                         {{ form.note }}
+                        <small class="ayuda-campo">Esta respuesta aparecera en el seguimiento publico del ticket.</small>
                     </div>
                     <button type="submit" class="boton-principal">Guardar cambio <span class="boton-flecha">&rarr;</span></button>
                 </form>
@@ -114,6 +115,11 @@
                                 <span class="timeline-punto">&#9998;</span>
                                 <div class="timeline-cuerpo">
                                     <strong>{{ event.title }}</strong>
+                                    {% if event.author_role == "Sistema" %}
+                                        <span class="autor-evento">Registro automatico</span>
+                                    {% else %}
+                                        <span class="autor-evento">{{ event.author_role }}: {{ event.author_name }}</span>
+                                    {% endif %}
                                     <small>{{ event.created_at|date:"d/m/Y H:i" }}</small>
                                     {% if event.note %}<p>{{ event.note }}</p>{% endif %}
                                 </div>

@@ -1931,6 +1931,14 @@ footer p {
     color: var(--azul);
 }
 
+.autor-evento {
+    color: var(--naranja);
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    margin-top: 3px;
+}
+
 .timeline-cuerpo small {
     color: var(--gris);
     font-size: 0.82rem;
@@ -2385,4 +2393,28 @@ footer p {
         width: 100%;
         text-align: center;
     }
+}
+
+.seguimiento-respuesta {
+    background: #f8fbff;
+    border: 1px solid #dbe7f7;
+    border-radius: 14px;
+    margin-top: 24px;
+    padding: 20px;
+}
+
+.seguimiento-respuesta h2 {
+    color: var(--azul);
+    font-size: 1.1rem;
+    margin: 4px 0 6px;
+}
+
+.seguimiento-respuesta > div > p:last-child {
+    color: var(--gris);
+    line-height: 1.55;
+    margin: 0;
+}
+
+.ticket-comment-form {
+    margin-top: 18px;
 }

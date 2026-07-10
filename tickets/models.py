@@ -79,6 +79,8 @@ class TicketEvent(models.Model):
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name="events")
     title = models.CharField(max_length=120)
     note = models.TextField(blank=True)
+    author_name = models.CharField(max_length=120, default="Sistema")
+    author_role = models.CharField(max_length=30, default="Sistema")
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

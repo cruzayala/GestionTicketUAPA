@@ -1,5 +1,3 @@
-BEGIN TRANSACTION;
-
 CREATE TABLE "auth_group" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name" varchar(150) NOT NULL UNIQUE);
 
 CREATE TABLE "auth_group_permissions" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "group_id" integer NOT NULL REFERENCES "auth_group" ("id") DEFERRABLE INITIALLY DEFERRED, "permission_id" integer NOT NULL REFERENCES "auth_permission" ("id") DEFERRABLE INITIALLY DEFERRED);
@@ -20,9 +18,9 @@ CREATE TABLE "django_migrations" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMEN
 
 CREATE TABLE "django_session" ("session_key" varchar(40) NOT NULL PRIMARY KEY, "session_data" text NOT NULL, "expire_date" datetime NOT NULL);
 
-CREATE TABLE "tickets_ticket" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "number" varchar(20) NOT NULL UNIQUE, "full_name" varchar(120) NOT NULL, "email" varchar(254) NOT NULL, "enrollment" varchar(30) NOT NULL, "category" varchar(40) NOT NULL, "priority" varchar(20) NOT NULL, "subject" varchar(160) NOT NULL, "description" text NOT NULL, "status" varchar(20) NOT NULL, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL);
+CREATE TABLE "tickets_ticket" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "number" varchar(20) NOT NULL UNIQUE, "full_name" varchar(120) NOT NULL, "email" varchar(254) NOT NULL, "enrollment" varchar(30) NOT NULL, "category" varchar(40) NOT NULL, "priority" varchar(20) NOT NULL, "subject" varchar(160) NOT NULL, "description" text NOT NULL, "status" varchar(20) NOT NULL, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "assigned_at" datetime NULL, "assigned_to_id" integer NULL REFERENCES "auth_user" ("id") DEFERRABLE INITIALLY DEFERRED, "closed_at" datetime NULL, "first_response_at" datetime NULL);
 
-CREATE TABLE "tickets_ticketevent" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "title" varchar(120) NOT NULL, "note" text NOT NULL, "created_at" datetime NOT NULL, "ticket_id" bigint NOT NULL REFERENCES "tickets_ticket" ("id") DEFERRABLE INITIALLY DEFERRED);
+CREATE TABLE "tickets_ticketevent" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "title" varchar(120) NOT NULL, "note" text NOT NULL, "created_at" datetime NOT NULL, "ticket_id" bigint NOT NULL REFERENCES "tickets_ticket" ("id") DEFERRABLE INITIALLY DEFERRED, "author_name" varchar(120) NOT NULL, "author_role" varchar(30) NOT NULL);
 
 CREATE INDEX "auth_group_permissions_group_id_b120cbf9" ON "auth_group_permissions" ("group_id");
 
@@ -54,6 +52,6 @@ CREATE UNIQUE INDEX "django_content_type_app_label_model_76bd3d3b_uniq" ON "djan
 
 CREATE INDEX "django_session_expire_date_a5c62663" ON "django_session" ("expire_date");
 
-CREATE INDEX "tickets_ticketevent_ticket_id_b572d14b" ON "tickets_ticketevent" ("ticket_id");
+CREATE INDEX "tickets_ticket_assigned_to_id_142e13bf" ON "tickets_ticket" ("assigned_to_id");
 
-COMMIT;
+CREATE INDEX "tickets_ticketevent_ticket_id_b572d14b" ON "tickets_ticketevent" ("ticket_id");

@@ -91,18 +91,22 @@
                         <div class="campo">
                             <label for="id_assigned_to">Responsable</label>
                             {{ form.assigned_to }}
+                            {% for field_error in form.assigned_to.errors %}<small class="text-danger">{{ field_error }}</small>{% endfor %}
                         </div>
                         <div class="campo">
                             <label for="id_status">Estado</label>
                             {{ form.status }}
+                            {% for field_error in form.status.errors %}<small class="text-danger">{{ field_error }}</small>{% endfor %}
                         </div>
                         <div class="campo">
                             <label for="id_priority">Prioridad</label>
                             {{ form.priority }}
+                            {% for field_error in form.priority.errors %}<small class="text-danger">{{ field_error }}</small>{% endfor %}
                         </div>
                         <div class="campo">
                             <label for="id_category">Categoria</label>
                             {{ form.category }}
+                            {% for field_error in form.category.errors %}<small class="text-danger">{{ field_error }}</small>{% endfor %}
                         </div>
                         <div class="campo ticket-management-subject">
                             <label for="id_subject" class="ticket-field-heading">
@@ -110,6 +114,7 @@
                                 <span>Asunto<small>Resumen breve de la solicitud</small></span>
                             </label>
                             {{ form.subject }}
+                            {% for field_error in form.subject.errors %}<small class="text-danger">{{ field_error }}</small>{% endfor %}
                         </div>
                         <div class="campo ticket-management-description">
                             <label for="id_description" class="ticket-field-heading">
@@ -117,6 +122,7 @@
                                 <span>Descripcion<small>Informacion principal del caso</small></span>
                             </label>
                             {{ form.description }}
+                            {% for field_error in form.description.errors %}<small class="text-danger">{{ field_error }}</small>{% endfor %}
                         </div>
                         <div class="campo ticket-response-composer">
                             <div class="ticket-response-heading">
@@ -130,6 +136,7 @@
                                 <span class="ticket-response-avatar">{{ request.user.username|slice:":2"|upper }}</span>
                                 <div class="ticket-response-input">
                                     {{ form.note }}
+                                    {% for field_error in form.note.errors %}<small class="text-danger">{{ field_error }}</small>{% endfor %}
                                     <div class="ticket-response-meta">
                                         <span>Equipo de soporte</span>
                                         <strong>Se registrara al guardar el ticket</strong>
@@ -140,7 +147,7 @@
                     </div>
                 </form>
                 <div class="ticket-management-actions">
-                    <form method="post" action="{% url 'ticket_delete' ticket.number %}" class="ticket-delete-action">
+                    <form method="post" action="{% url 'ticket_delete' ticket.number %}" class="ticket-delete-action" onsubmit="return confirm('Eliminar este ticket de forma permanente?')">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-link text-danger p-0">Eliminar ticket</button>
                     </form>

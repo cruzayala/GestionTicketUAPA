@@ -10,11 +10,16 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 from django.utils import timezone
 
-from .forms import AdminTicketCreateForm, ContactForm, CustomPermissionForm, LoginForm, RoleForm, SearchTicketForm, TicketCommentForm, TicketDetailForm, TicketUpdateForm, UserCreateForm, UserUpdateForm
+from .forms import AdminTicketCreateForm, ContactForm, CustomPermissionForm, FUNCTIONAL_PERMISSION_CHOICES, LoginForm, RoleForm, SearchTicketForm, TicketAccessForm, TicketCommentForm, TicketDetailForm, TicketUpdateForm, UserCreateForm, UserUpdateForm
 from .models import Ticket, TicketEvent
 
 
 def support_required(user):
+    permissions = ["tickets.view_ticket", "tickets.add_ticket", "tickets.view_reports", "tickets.manage_access"]
+    return user.is_authenticated and (user.is_staff or any(user.has_perm(permission) for permission in permissions))
+
+
+def ticket_view_required(user):
     return user.is_authenticated and (user.is_staff or user.has_perm("tickets.view_ticket"))
 
 
@@ -31,7 +36,29 @@ def ticket_delete_required(user):
 
 
 def access_required(user):
-    return user.is_authenticated and user.is_staff
+    return user.is_authenticated and (user.is_staff or user.has_perm("tickets.manage_access"))
+
+
+def reports_required(user):
+    return user.is_authenticated and (user.is_staff or user.has_perm("tickets.view_reports"))
+
+
+def login_destination(user):
+    if user.is_staff or user.has_perm("tickets.view_ticket"):
+        return "panel"
+    if user.has_perm("tickets.manage_access"):
+        return "settings"
+    if user.has_perm("tickets.view_reports"):
+        return "reports"
+    return "ticket_create_admin"
+
+
+def support_agents():
+    return get_user_model().objects.filter(is_active=True).filter(
+        Q(is_staff=True)
+        | Q(groups__permissions__content_type__app_label="tickets", groups__permissions__codename="change_ticket")
+        | Q(user_permissions__content_type__app_label="tickets", user_permissions__codename="change_ticket")
+    ).distinct().order_by("username")
 
 
 def home(request):
@@ -47,7 +74,7 @@ def home(request):
 
 def login_view(request):
     if support_required(request.user):
-        return redirect("panel")
+        return redirect(login_destination(request.user))
     form = LoginForm(request.POST or None)
     error = ""
     if request.method == "POST" and form.is_valid():
@@ -56,8 +83,8 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user and support_required(user):
             auth_login(request, user)
-            return redirect("panel")
-        error = "Usuario o contrasena incorrectos, o la cuenta no tiene acceso administrativo."
+            return redirect(login_destination(user))
+        error = "Usuario o contrasena incorrectos, o la cuenta no tiene permisos de acceso."
     return render(request, "tickets/login.html", {"form": form, "error": error})
 
 
@@ -67,7 +94,7 @@ def logout_view(request):
     return redirect("home")
 
 
-@user_passes_test(support_required, login_url="login")
+@user_passes_test(ticket_view_required, login_url="login")
 def panel(request):
     tickets = Ticket.objects.all()
     closed_tickets = list(tickets.filter(status="Cerrado", closed_at__isnull=False))
@@ -86,7 +113,7 @@ def panel(request):
     return render(request, "tickets/panel.html", context)
 
 
-@user_passes_test(support_required, login_url="login")
+@user_passes_test(ticket_view_required, login_url="login")
 def ticket_list(request):
     all_tickets = Ticket.objects.all()
     tickets = all_tickets
@@ -137,7 +164,7 @@ def ticket_list(request):
     return render(request, "tickets/tickets.html", context)
 
 
-@user_passes_test(support_required, login_url="login")
+@user_passes_test(reports_required, login_url="login")
 def reports(request):
     tickets = Ticket.objects.all()
     closed_tickets = list(tickets.filter(status="Cerrado", closed_at__isnull=False))
@@ -146,7 +173,7 @@ def reports(request):
         average_minutes = sum((ticket.closed_at - ticket.created_at).total_seconds() / 60 for ticket in closed_tickets) / len(closed_tickets)
     hours, minutes = divmod(int(average_minutes), 60)
     staff_summary = []
-    for user in get_user_model().objects.filter(is_staff=True, is_active=True).order_by("username"):
+    for user in support_agents():
         assigned = tickets.filter(assigned_to=user)
         staff_summary.append({
             "name": user.get_full_name() or user.username,
@@ -221,6 +248,7 @@ def ticket_detail_form(request):
             author_role="Sistema",
         )
         request.session["last_ticket"] = ticket.number
+        request.session[f"ticket_access_{ticket.number}"] = True
         request.session.pop("ticket_contact", None)
         return redirect("ticket_confirm")
     return render(request, "tickets/ticket_detalle.html", {"form": form})
@@ -236,11 +264,23 @@ def ticket_confirm(request):
 
 def ticket_status(request, number):
     ticket = get_object_or_404(Ticket, number=number.upper())
-    form = TicketCommentForm(request.POST or None)
+    access_key = f"ticket_access_{ticket.number}"
+    verified = request.session.get(access_key, False)
+    form = TicketCommentForm(request.POST or None if request.POST.get("action") == "comment" else None)
+    access_form = TicketAccessForm(request.POST or None if request.POST.get("action") == "verify" else None)
     error = ""
-    if request.method == "POST" and form.is_valid():
-        email = form.cleaned_data["email"].strip().lower()
+    access_error = ""
+    if request.method == "POST" and request.POST.get("action") == "verify" and access_form.is_valid():
+        email = access_form.cleaned_data["email"].strip().lower()
         if email == ticket.email.lower():
+            request.session[access_key] = True
+            messages.success(request, "Correo verificado. Ya puede consultar el seguimiento completo.")
+            return redirect("ticket_status", number=ticket.number)
+        access_error = "El correo no coincide con el usado al crear este ticket."
+    if request.method == "POST" and request.POST.get("action") == "comment":
+        if not verified:
+            return redirect("ticket_status", number=ticket.number)
+        if form.is_valid():
             TicketEvent.objects.create(
                 ticket=ticket,
                 title="Mensaje del solicitante",
@@ -250,14 +290,21 @@ def ticket_status(request, number):
             )
             messages.success(request, "Su mensaje fue agregado al seguimiento del ticket.")
             return redirect("ticket_status", number=ticket.number)
-        error = "El correo no coincide con el usado al crear este ticket."
-    return render(request, "tickets/estado_ticket.html", {"ticket": ticket, "form": form, "error": error})
+        error = "Revise el mensaje antes de enviarlo."
+    return render(request, "tickets/estado_ticket.html", {
+        "ticket": ticket,
+        "form": form,
+        "access_form": access_form,
+        "verified": verified,
+        "error": error,
+        "access_error": access_error,
+    })
 
 
 @user_passes_test(ticket_change_required, login_url="login")
 def ticket_manage(request, number):
     ticket = get_object_or_404(Ticket, number=number.upper())
-    staff_users = get_user_model().objects.filter(is_staff=True, is_active=True).order_by("username")
+    support_users = support_agents()
     form = TicketUpdateForm(request.POST or None, initial={
         "assigned_to": ticket.assigned_to,
         "category": ticket.category,
@@ -265,7 +312,7 @@ def ticket_manage(request, number):
         "subject": ticket.subject,
         "description": ticket.description,
         "status": ticket.status,
-    }, staff_users=staff_users)
+    }, support_users=support_users)
     if request.method == "POST" and form.is_valid():
         previous_assignee = ticket.assigned_to
         assigned_to = form.cleaned_data["assigned_to"]
@@ -337,7 +384,7 @@ def ticket_delete(request, number):
 @user_passes_test(access_required, login_url="login")
 def settings_view(request):
     ticket_content_type = ContentType.objects.get_for_model(Ticket)
-    custom_permissions = Permission.objects.filter(content_type=ticket_content_type).exclude(codename__in=["add_ticket", "change_ticket", "delete_ticket", "view_ticket"])
+    custom_permissions = Permission.objects.filter(content_type=ticket_content_type, codename__in=[choice[0] for choice in FUNCTIONAL_PERMISSION_CHOICES])
     context = {
         "user_count": get_user_model().objects.count(),
         "role_count": Group.objects.count(),
@@ -373,10 +420,18 @@ def access_user_update(request, user_id):
     user = get_object_or_404(get_user_model(), pk=user_id)
     form = UserUpdateForm(request.POST or None, instance=user)
     if request.method == "POST" and form.is_valid():
+        selected_groups = form.cleaned_data["groups"]
+        keeps_access = form.cleaned_data["is_staff"] or selected_groups.filter(
+            permissions__content_type__app_label="tickets",
+            permissions__codename="manage_access",
+        ).exists() or user.user_permissions.filter(
+            content_type__app_label="tickets",
+            codename="manage_access",
+        ).exists()
         if user == request.user and not form.cleaned_data["is_active"]:
             form.add_error("is_active", "No puede desactivar su propia cuenta.")
-        elif user == request.user and not form.cleaned_data["is_staff"]:
-            form.add_error("is_staff", "No puede retirar su propio acceso administrativo.")
+        elif user == request.user and not keeps_access:
+            form.add_error("groups", "Debe conservar un rol con permiso para administrar el acceso.")
         else:
             updated_user = form.save()
             if user == request.user and form.cleaned_data.get("password1"):
@@ -454,13 +509,16 @@ def access_role_delete(request, role_id):
 
 def custom_permission_queryset():
     content_type = ContentType.objects.get_for_model(Ticket)
-    return Permission.objects.filter(content_type=content_type).exclude(codename__in=["add_ticket", "change_ticket", "delete_ticket", "view_ticket"])
+    return Permission.objects.filter(content_type=content_type, codename__in=[choice[0] for choice in FUNCTIONAL_PERMISSION_CHOICES])
 
 
 @user_passes_test(access_required, login_url="login")
 def access_permissions(request):
     permissions = custom_permission_queryset().order_by("name")
-    return render(request, "tickets/access_permissions.html", {"permissions": permissions})
+    return render(request, "tickets/access_permissions.html", {
+        "permissions": permissions,
+        "can_create": permissions.count() < len(FUNCTIONAL_PERMISSION_CHOICES),
+    })
 
 
 @user_passes_test(access_required, login_url="login")

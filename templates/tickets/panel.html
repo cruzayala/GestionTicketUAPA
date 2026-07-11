@@ -13,9 +13,9 @@
             </div>
             <div class="acciones">
                 <div class="bienvenida">
-                    <span class="sidebar-avatar">AS</span>
+                    <span class="sidebar-avatar">{{ request.user.username|slice:":2"|upper }}</span>
                     <div>
-                        <strong>Admin</strong>
+                        <strong>{{ request.user.get_full_name|default:request.user.username }}</strong>
                         <small>En linea</small>
                     </div>
                 </div>

@@ -2,8 +2,16 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import Group, Permission
+from django.contrib.auth import password_validation
+from django.core.exceptions import ValidationError
 
 from .models import CATEGORY_CHOICES, PRIORITY_CHOICES, STATUS_CHOICES
+
+
+FUNCTIONAL_PERMISSION_CHOICES = [
+    ("view_reports", "Ver reportes"),
+    ("manage_access", "Administrar usuarios, roles y permisos"),
+]
 
 
 class LoginForm(forms.Form):
@@ -47,15 +55,18 @@ class TicketUpdateForm(forms.Form):
     status = forms.ChoiceField(choices=STATUS_CHOICES, widget=forms.Select(attrs={"class": "form-select"}))
     note = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows": 4, "placeholder": "Escriba una respuesta o actualizacion para el solicitante", "class": "form-control"}))
 
-    def __init__(self, *args, staff_users=None, **kwargs):
+    def __init__(self, *args, support_users=None, **kwargs):
         super().__init__(*args, **kwargs)
-        if staff_users is not None:
-            self.fields["assigned_to"].queryset = staff_users
+        if support_users is not None:
+            self.fields["assigned_to"].queryset = support_users
 
 
 class TicketCommentForm(forms.Form):
-    email = forms.EmailField(widget=forms.EmailInput(attrs={"placeholder": "El correo usado al crear el ticket", "class": "form-control"}))
     message = forms.CharField(min_length=5, widget=forms.Textarea(attrs={"rows": 4, "placeholder": "Escriba informacion adicional o responda al equipo de soporte", "class": "form-control"}))
+
+
+class TicketAccessForm(forms.Form):
+    email = forms.EmailField(widget=forms.EmailInput(attrs={"placeholder": "Correo usado al crear el ticket", "class": "form-control"}))
 
 
 class UserCreateForm(UserCreationForm):
@@ -64,7 +75,7 @@ class UserCreateForm(UserCreationForm):
     email = forms.EmailField(label="Correo", widget=forms.EmailInput(attrs={"class": "form-control"}))
     groups = forms.ModelMultipleChoiceField(label="Roles", queryset=Group.objects.order_by("name"), required=False, widget=forms.CheckboxSelectMultiple)
     is_active = forms.BooleanField(label="Cuenta activa", required=False, initial=True)
-    is_staff = forms.BooleanField(label="Acceso administrativo", required=False, initial=True)
+    is_staff = forms.BooleanField(label="Acceso administrativo", required=False, initial=False)
 
     class Meta:
         model = get_user_model()
@@ -109,8 +120,11 @@ class UserUpdateForm(forms.ModelForm):
         if password1 or password2:
             if password1 != password2:
                 self.add_error("password2", "Las contrasenas no coinciden.")
-            elif len(password1) < 8:
-                self.add_error("password1", "La contrasena debe tener al menos 8 caracteres.")
+            else:
+                try:
+                    password_validation.validate_password(password1, self.instance)
+                except ValidationError as errors:
+                    self.add_error("password1", errors)
         return cleaned_data
 
     def save(self, commit=True):
@@ -125,6 +139,9 @@ class UserUpdateForm(forms.ModelForm):
 
 class PermissionChoiceField(forms.ModelMultipleChoiceField):
     def label_from_instance(self, permission):
+        functional_labels = dict(FUNCTIONAL_PERMISSION_CHOICES)
+        if permission.codename in functional_labels:
+            return functional_labels[permission.codename]
         action = permission.codename.split("_", 1)[0]
         action_labels = {"add": "Crear", "change": "Editar", "delete": "Eliminar", "view": "Ver"}
         model_labels = {"group": "roles", "permission": "permisos", "user": "usuarios", "ticket": "tickets", "ticketevent": "seguimiento de tickets"}
@@ -151,27 +168,28 @@ class RoleForm(forms.ModelForm):
 
 
 class CustomPermissionForm(forms.ModelForm):
-    codename = forms.RegexField(
+    codename = forms.ChoiceField(
         label="Codigo",
-        regex=r"^[a-z0-9_]+$",
-        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "gestionar_reportes"}),
-        error_messages={"invalid": "Use letras minusculas, numeros y guion bajo."},
+        choices=FUNCTIONAL_PERMISSION_CHOICES,
+        widget=forms.Select(attrs={"class": "form-select"}),
     )
 
     class Meta:
         model = Permission
-        fields = ("name", "codename")
-        labels = {"name": "Nombre del permiso"}
-        widgets = {
-            "name": forms.TextInput(attrs={"class": "form-control", "placeholder": "Gestionar reportes"}),
-        }
+        fields = ("codename",)
 
     def __init__(self, *args, content_type=None, **kwargs):
         self.content_type = content_type
         super().__init__(*args, **kwargs)
+        current_codename = self.instance.codename if self.instance.pk else None
+        existing = set(Permission.objects.filter(content_type=content_type).values_list("codename", flat=True))
+        self.fields["codename"].choices = [
+            choice for choice in FUNCTIONAL_PERMISSION_CHOICES
+            if choice[0] == current_codename or choice[0] not in existing
+        ]
 
     def clean_codename(self):
-        codename = self.cleaned_data["codename"].strip().lower()
+        codename = self.cleaned_data["codename"]
         existing = Permission.objects.filter(content_type=self.content_type, codename=codename)
         if self.instance.pk:
             existing = existing.exclude(pk=self.instance.pk)
@@ -182,6 +200,7 @@ class CustomPermissionForm(forms.ModelForm):
     def save(self, commit=True):
         permission = super().save(commit=False)
         permission.content_type = self.content_type
+        permission.name = dict(FUNCTIONAL_PERMISSION_CHOICES)[permission.codename]
         if commit:
             permission.save()
         return permission

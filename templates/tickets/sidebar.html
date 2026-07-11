@@ -1,6 +1,6 @@
 <aside class="sidebar">
     <header class="marca">
-        <a class="logo-principal logo-sidebar logo-claro" href="{% url 'panel' %}">
+        <a class="logo-principal logo-sidebar logo-claro" href="{% if request.user.is_staff or perms.tickets.view_ticket %}{% url 'panel' %}{% elif perms.tickets.manage_access %}{% url 'settings' %}{% elif perms.tickets.view_reports %}{% url 'reports' %}{% else %}{% url 'ticket_create_admin' %}{% endif %}">
             <span class="logo-icono">&#127915;</span>
             <span class="logo-resaltado">Soporte</span>
             <span class="logo-separador">|</span>
@@ -9,28 +9,32 @@
     </header>
 
     <nav class="menu-lateral">
-        <a href="{% url 'panel' %}" class="{% if active == 'panel' %}activo{% endif %}">
-            <span class="menu-icono">&#127968;</span>
-            Dashboard
-        </a>
-        <a href="{% url 'ticket_list' %}" class="{% if active == 'tickets' %}activo{% endif %}">
-            <span class="menu-icono">&#128221;</span>
-            Tickets
-        </a>
-        <a href="{% url 'ticket_list' %}?view=unassigned" class="{% if active == 'inbox' %}activo{% endif %}">
-            <span class="menu-icono">&#128230;</span>
-            Bandeja
-        </a>
-        {% if request.user.is_staff %}
+        {% if request.user.is_staff or perms.tickets.view_ticket %}
+            <a href="{% url 'panel' %}" class="{% if active == 'panel' %}activo{% endif %}">
+                <span class="menu-icono">&#127968;</span>
+                Dashboard
+            </a>
+            <a href="{% url 'ticket_list' %}" class="{% if active == 'tickets' %}activo{% endif %}">
+                <span class="menu-icono">&#128221;</span>
+                Tickets
+            </a>
+            <a href="{% url 'ticket_list' %}?view=unassigned" class="{% if active == 'inbox' %}activo{% endif %}">
+                <span class="menu-icono">&#128230;</span>
+                Bandeja
+            </a>
+        {% endif %}
+        {% if request.user.is_staff or perms.tickets.manage_access %}
             <a href="{% url 'settings' %}" class="{% if active == 'settings' %}activo{% endif %}">
                 <span class="menu-icono">&#9881;</span>
                 Configuracion
             </a>
         {% endif %}
-        <a href="{% url 'reports' %}" class="{% if active == 'reports' %}activo{% endif %}">
-            <span class="menu-icono">&#128202;</span>
-            Reportes
-        </a>
+        {% if request.user.is_staff or perms.tickets.view_reports %}
+            <a href="{% url 'reports' %}" class="{% if active == 'reports' %}activo{% endif %}">
+                <span class="menu-icono">&#128202;</span>
+                Reportes
+            </a>
+        {% endif %}
         <form method="post" action="{% url 'logout' %}" class="sidebar-logout">
             {% csrf_token %}
             <button type="submit">

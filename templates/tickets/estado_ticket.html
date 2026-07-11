@@ -70,6 +70,26 @@
             </div>
             <div>
                 <label class="label-seccion">Seguimiento de la solicitud</label>
+                {% if not verified %}
+                    <section class="ticket-verification">
+                        <span class="ticket-verification-icon">&#128274;</span>
+                        <div>
+                            <h2>Verifique su correo</h2>
+                            <p>Confirme el correo usado al crear el ticket para consultar los mensajes del seguimiento.</p>
+                            <form method="post" class="ticket-verification-form">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="verify">
+                                {% if access_error %}<div class="alert alert-danger" role="alert">{{ access_error }}</div>{% endif %}
+                                <div class="campo">
+                                    <label for="id_email">Correo de contacto</label>
+                                    {{ access_form.email }}
+                                    {% for field_error in access_form.email.errors %}<small class="text-danger">{{ field_error }}</small>{% endfor %}
+                                </div>
+                                <button type="submit" class="boton-principal">Ver seguimiento <span class="boton-flecha">&rarr;</span></button>
+                            </form>
+                        </div>
+                    </section>
+                {% else %}
                 <ul class="timeline">
                     {% for event in ticket.events.all %}
                         <li class="completado">
@@ -96,7 +116,9 @@
                         </li>
                     {% endfor %}
                 </ul>
+                {% endif %}
             </div>
+            {% if verified %}
             <section class="seguimiento-respuesta">
                 <div>
                     <p class="etiqueta">Agregar informacion</p>
@@ -105,13 +127,10 @@
                 </div>
                 <form method="post" class="ticket-comment-form">
                     {% csrf_token %}
+                    <input type="hidden" name="action" value="comment">
                     {% if error %}
                         <div class="alert alert-danger" role="alert">{{ error }}</div>
                     {% endif %}
-                    <div class="campo">
-                        <label for="id_email">Correo de contacto</label>
-                        {{ form.email }}
-                    </div>
                     <div class="campo">
                         <label for="id_message">Mensaje</label>
                         {{ form.message }}
@@ -119,6 +138,7 @@
                     <button type="submit" class="boton-principal">Agregar mensaje <span class="boton-flecha">&rarr;</span></button>
                 </form>
             </section>
+            {% endif %}
             <div class="ticket-form-acciones">
                 <a class="boton-secundario" href="{% url 'home' %}"><span class="boton-flecha invertida">&larr;</span> Volver al inicio</a>
                 <a class="boton-principal" href="{% url 'ticket_contact' %}">Crear otro ticket <span class="boton-flecha">&rarr;</span></a>

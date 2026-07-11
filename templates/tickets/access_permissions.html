@@ -11,7 +11,7 @@
                 <h1>Permisos</h1>
                 <p class="sub-titulo">Cree permisos personalizados para asignarlos a los roles.</p>
             </div>
-            <a class="boton-principal" href="{% url 'access_permission_create' %}">Nuevo permiso <span class="boton-flecha">&rarr;</span></a>
+            {% if can_create %}<a class="boton-principal" href="{% url 'access_permission_create' %}">Nuevo permiso <span class="boton-flecha">&rarr;</span></a>{% endif %}
         </header>
 
         <nav class="access-tabs" aria-label="Administracion de acceso">

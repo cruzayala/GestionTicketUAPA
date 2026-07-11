@@ -73,4 +73,24 @@ GestionTicket/
 └── requirements.txt   # Dependencias necesarias para ejecutar la aplicación
 ```
 
+## Verificacion final del proyecto
+
+Para validar el funcionamiento del sistema GestioTicketUAPA se recomienda realizar las siguientes pruebas:
+
+1. Crear y activar el entorno virtual
+2. Instalar las dependencias del proyecto desde el archivo 'requeriments.txt'
+3. Ejecutar las migraciones de Django.
+4. Iniciar el servidor local con 'python manage.py runserver'.
+5. Acceder al sistema desde `http://127.0.0.1:8000/`.
+6. Verificar el inicio de sesión.
+7. Crear un nuevo ticket.
+8. Consultar la lista de tickets registrados.
+9. Editar un ticket existente.
+10. Eliminar un ticket.
+11. Cerrar sesión y comprobar que las rutas privadas no estén disponibles sin autenticación.
+
+Esta verificación permite confirmar que el proyecto cumple con las funcionalidades principales solicitadas en la etapa final: autenticación, manejo de sesiones y ciclo CRUD completo.
+
+Se agregó documentación de verificación final del proyecto para facilitar la revisión técnica.
+
 Se recomienda mantener esta estructura para facilitar el mantenimiento, la escalabilidad y la incorporación de nuevas funcionalidades al sistema.

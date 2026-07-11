@@ -3432,6 +3432,101 @@ footer p {
     }
 }
 
+.ticket-verification {
+    background: #f8fbff;
+    border: 1px solid #dbe7f7;
+    border-radius: 8px;
+    display: grid;
+    gap: 16px;
+    grid-template-columns: 44px minmax(0, 1fr);
+    margin-top: 14px;
+    padding: 20px;
+}
+
+.ticket-verification-icon {
+    align-items: center;
+    background: var(--azul);
+    border-radius: 50%;
+    color: var(--blanco);
+    display: inline-flex;
+    height: 44px;
+    justify-content: center;
+    width: 44px;
+}
+
+.ticket-verification h2 {
+    color: var(--azul);
+    font-size: 1.05rem;
+    margin: 0 0 5px;
+}
+
+.ticket-verification p {
+    color: var(--gris);
+    margin: 0 0 16px;
+}
+
+.ticket-verification-form {
+    display: grid;
+    gap: 12px;
+}
+
+.ticket-verification-form .campo {
+    margin: 0;
+}
+
+.ticket-verification-form .boton-principal {
+    justify-self: start;
+}
+
+.sidebar-logout button {
+    font-size: 0.86rem;
+    padding-bottom: 8px;
+    padding-top: 8px;
+}
+
+.sidebar-logout .menu-icono {
+    height: 28px;
+    width: 28px;
+}
+
+@media (max-width: 850px) {
+    .menu-lateral {
+        scrollbar-width: none;
+    }
+
+    .menu-lateral::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+@media (max-width: 560px) {
+    .landing-header {
+        gap: 16px;
+    }
+
+    .landing-header .landing-nav {
+        display: grid;
+        gap: 8px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .landing-header .landing-nav a {
+        border: 1px solid var(--borde);
+        border-radius: 8px;
+        padding: 9px 8px;
+        text-align: center;
+    }
+
+    .ticket-verification {
+        grid-template-columns: 1fr;
+        padding: 16px;
+    }
+
+    .ticket-verification-form .boton-principal {
+        width: 100%;
+    }
+}
+
 .seguimiento-respuesta h2 {
     color: var(--azul);
     font-size: 1.1rem;

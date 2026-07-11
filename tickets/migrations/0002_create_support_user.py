@@ -1,9 +1,14 @@
+import os
+
 from django.conf import settings
 from django.contrib.auth.hashers import make_password
 from django.db import migrations
 
 
 def create_support_user(apps, schema_editor):
+    password = os.getenv("DJANGO_INITIAL_ADMIN_PASSWORD")
+    if not password:
+        return
     User = apps.get_model("auth", "User")
     username = "admin"
     if User.objects.filter(username=username).exists():
@@ -13,7 +18,7 @@ def create_support_user(apps, schema_editor):
         email="soporte@uapa.edu",
         first_name="Equipo",
         last_name="Soporte",
-        password=make_password("1234"),
+        password=make_password(password),
         is_staff=True,
         is_superuser=False,
         is_active=True,

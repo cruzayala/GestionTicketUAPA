@@ -38,7 +38,7 @@ a {
     align-items: center;
     gap: 18px;
     padding: 22px 7%;
-    background: var(--blanco);
+    background: var(--naranja);
     border-bottom: 1px solid var(--borde);
 }
 
@@ -46,7 +46,7 @@ a {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    color: var(--azul);
+    color: var(--blanco);
     font-weight: 700;
 }
 
@@ -64,7 +64,7 @@ a {
     display: flex;
     align-items: center;
     gap: 7px;
-    color: var(--azul);
+    color: var(--blanco);
     font-size: 1.25rem;
     font-weight: 700;
 }
@@ -75,7 +75,7 @@ a {
 }
 
 .logo-resaltado {
-    color: var(--naranja);
+    color: var(--blanco);
 }
 
 .logo-separador {
@@ -83,7 +83,7 @@ a {
 }
 
 .logo-normal {
-    color: var(--azul);
+    color: var(--blanco);
     font-weight: 400;
 }
 
